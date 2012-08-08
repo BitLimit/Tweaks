@@ -26,8 +26,8 @@ public class BitLimitTweaksListener implements Listener {
     public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
         // CreatureSpawnEvent (Entity spawnee, CreatureType type, Location loc, SpawnReason reason
 
-        CreatureType type = event.getCreatureType();
-        if (type.equals("SLIME")) {
+        EntityType type = event.getEntityType();
+        if (type == EntityType.SLIME) {
             this.plugin.getServer().broadcastMessage(type.toString());
         }
     }
