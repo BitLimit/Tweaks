@@ -18,7 +18,14 @@ public class TweaksCommandExecutor implements CommandExecutor {
     
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender.hasPermission("BitLimitTweaks")) {
-
+            if (args.length > 1) {
+                if (args.equals("weatherDuration")) {
+                    if (sender instanceof Player) {
+                        Player player = (Player)sender;
+                        player.getWorld().setWeatherDuration(args[1]);
+                    }
+                }
+            }
         } else {
             sender.sendMessage(ChatColor.RED + "You don't have permission to execute this command.");
         }
