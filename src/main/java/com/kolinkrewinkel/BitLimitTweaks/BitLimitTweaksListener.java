@@ -16,5 +16,17 @@ public class BitLimitTweaksListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.plugin = plugin;
     }
+
+    @EventHandler
+    public void onPlayerBedEnterEvent(PlayerBedEnterEvent event) {
+        Player player = event.getPlayer();
+        player.sendMessage(player.getWorld().getHumidity(player.getLocation());
+    }
+
+    @EventHandler
+    public void onPlayerBedLeaveEvent(PlayerBedLeaveEvent event) {
+        Player player = event.getPlayer();
+        player.sendMessage(player.getWorld().getHumidity(player.getLocation());
+    }
 }
 
