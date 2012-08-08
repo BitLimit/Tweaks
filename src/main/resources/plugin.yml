@@ -1,0 +1,14 @@
+main: com.kolinkrewinkel.BitLimitTweaks
+name: BitLimit Tweaks
+version: ${project.version}
+author: Kolin Krewinkel
+description: BitLimit Tweaks - Code level tweaks for Minecraft PS01 Gameplay
+website: http://github.com/kolinkrewinkel/BitLimitTweaks/
+commands:
+    tweaks:
+        description: Undefined
+permissions:
+    tweaks.*:
+        description: Gives all permissions of BitLimit Tweaks plugin toggling.
+        default: op
+      
