@@ -27,12 +27,12 @@ public class BitLimitTweaks extends JavaPlugin {
                 if (!world.hasStorm()) {
                     this.plugin.getServer().broadcastMessage(ChatColor.GREEN + "Rain decremented!");
                     int weatherDuration = world.getWeatherDuration();
-                    this.plugin.getServer().broadcastMessage(ChatColor.RED + Integer.toString(world.getWeatherDuration());
+                    this.plugin.getServer().broadcastMessage(ChatColor.RED + Integer.toString(world.getWeatherDuration()));
                     world.setWeatherDuration(weatherDuration + 6000);
-                    this.plugin.getServer().broadcastMessage(ChatColor.RED + Integer.toString(world.getWeatherDuration());
+                    this.plugin.getServer().broadcastMessage(ChatColor.RED + Integer.toString(world.getWeatherDuration()));
                 } else {
                     this.plugin.getServer().broadcastMessage(ChatColor.RED + "Timer untouched, it's raining!");
-                    this.plugin.getServer().broadcastMessage(ChatColor.RED + Integer.toString(world.getWeatherDuration());
+                    this.plugin.getServer().broadcastMessage(ChatColor.RED + Integer.toString(world.getWeatherDuration()));
                 }
             }
         }
