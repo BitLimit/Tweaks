@@ -21,5 +21,13 @@ public class BitLimitTweaksListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.plugin = plugin;
     }
+
+    @EventHandler
+    public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
+        // CreatureSpawnEvent (Entity spawnee, CreatureType type, Location loc, SpawnReason reason
+
+        CreatureType type = event.getCreatureType();
+        this.plugin.getServer().broadcastMessage(type.toString());
+    }
 }
 
