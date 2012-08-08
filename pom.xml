@@ -5,11 +5,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.kolinkrewinkel.BitLimitTNT</groupId>
-  <artifactId>BitLimitTNT</artifactId>
+  <groupId>com.kolinkrewinkel.BitLimitTweaks</groupId>
+  <artifactId>BitLimitTweaks</artifactId>
   <version>1.0</version>
-  <name>BitLimitTNT</name>
-  <description>WorldGuard-based TNT management for BitLimit servers.'</description>
+  <name>BitLimitTweaks</name>
+  <description>Code level tweaks for BitLimit PS01</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
