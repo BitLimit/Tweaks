@@ -22,7 +22,7 @@ public class TweaksCommandExecutor implements CommandExecutor {
                 if (args.equals("weatherDuration")) {
                     if (sender instanceof Player) {
                         Player player = (Player)sender;
-                        player.getWorld().setWeatherDuration(args[1]);
+                        player.getWorld().setWeatherDuration(Integer.parseInt(args[1]));
                     }
                 }
             }
