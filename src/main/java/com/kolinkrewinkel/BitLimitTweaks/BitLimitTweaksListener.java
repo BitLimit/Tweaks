@@ -21,17 +21,5 @@ public class BitLimitTweaksListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.plugin = plugin;
     }
-
-    @EventHandler
-    public void onPlayerBedEnterEvent(PlayerBedEnterEvent event) {
-        Player player = event.getPlayer();
-        player.sendMessage(Integer.toString(player.getWorld().getWeatherDuration()));
-    }
-
-    @EventHandler
-    public void onPlayerBedLeaveEvent(PlayerBedLeaveEvent event) {
-        Player player = event.getPlayer();
-        player.sendMessage(Integer.toString(player.getWorld().getWeatherDuration()));
-    }
 }
 
