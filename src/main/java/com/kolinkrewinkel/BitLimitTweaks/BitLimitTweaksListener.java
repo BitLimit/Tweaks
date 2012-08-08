@@ -3,6 +3,11 @@ package com.kolinkrewinkel.BitLimitTweaks;
 import org.bukkit.plugin.Plugin;
 import java.util.*;
 
+import org.bukkit.event.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.player.*;
+
 public class BitLimitTweaksListener implements Listener {
     private final BitLimitTweaks plugin; // Reference main plugin
     
@@ -20,13 +25,17 @@ public class BitLimitTweaksListener implements Listener {
     @EventHandler
     public void onPlayerBedEnterEvent(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
-        player.sendMessage(player.getWorld().getHumidity(player.getLocation());
+        int x = player.getLocation().getBlockX();
+        int z = player.getLocation().getBlockZ();
+        player.sendMessage(Integer.toString(player.getWorld().getHumidity(x, z)));
     }
 
     @EventHandler
     public void onPlayerBedLeaveEvent(PlayerBedLeaveEvent event) {
         Player player = event.getPlayer();
-        player.sendMessage(player.getWorld().getHumidity(player.getLocation());
+        int x = player.getLocation().getBlockX();
+        int z = player.getLocation().getBlockZ();
+        player.sendMessage(Integer.toString(player.getWorld().getHumidity(x, z)));
     }
 }
 
