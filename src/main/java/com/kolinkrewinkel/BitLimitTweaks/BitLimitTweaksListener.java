@@ -25,17 +25,13 @@ public class BitLimitTweaksListener implements Listener {
     @EventHandler
     public void onPlayerBedEnterEvent(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
-        int x = player.getLocation().getBlockX();
-        int z = player.getLocation().getBlockZ();
-        player.sendMessage(Double.toString(player.getWorld().getHumidity(x, z)));
+        player.sendMessage(Integer.toString(player.getWorld().getWeatherDuration()));
     }
 
     @EventHandler
     public void onPlayerBedLeaveEvent(PlayerBedLeaveEvent event) {
         Player player = event.getPlayer();
-        int x = player.getLocation().getBlockX();
-        int z = player.getLocation().getBlockZ();
-        player.sendMessage(Double.toString(player.getWorld().getHumidity(x, z)));
+        player.sendMessage(Integer.toString(player.getWorld().getWeatherDuration()));
     }
 }
 
