@@ -19,10 +19,11 @@ public class TweaksCommandExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender.hasPermission("BitLimitTweaks")) {
             if (args.length > 1) {
-                if (args.equals("weatherDuration")) {
+                if (args[0].equals("weatherDuration")) {
                     if (sender instanceof Player) {
                         Player player = (Player)sender;
                         player.getWorld().setWeatherDuration(Integer.parseInt(args[1]));
+                        player.sendMessage(Integer.toString(player.getWorld().getWeatherDuration()));
                     }
                 }
             }
