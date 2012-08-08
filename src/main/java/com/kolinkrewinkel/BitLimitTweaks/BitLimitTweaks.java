@@ -8,7 +8,7 @@ public class BitLimitTweaks extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        new BitLimitTNTListener(this);
+        new BitLimitTweaksListener(this);
 
         this.getCommand("tweaks").setExecutor(new TweaksCommandExecutor(this));
     }
