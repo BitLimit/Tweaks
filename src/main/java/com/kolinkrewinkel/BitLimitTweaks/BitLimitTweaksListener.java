@@ -6,7 +6,7 @@ import java.util.*;
 import org.bukkit.event.*;
 import org.bukkit.*;
 import org.bukkit.entity.*;
-import org.bukkit.event.player.*;
+import org.bukkit.event.entity.*;
 
 public class BitLimitTweaksListener implements Listener {
     private final BitLimitTweaks plugin; // Reference main plugin
@@ -27,7 +27,9 @@ public class BitLimitTweaksListener implements Listener {
         // CreatureSpawnEvent (Entity spawnee, CreatureType type, Location loc, SpawnReason reason
 
         CreatureType type = event.getCreatureType();
-        this.plugin.getServer().broadcastMessage(type.toString());
+        if (type.equals("SLIME")) {
+            this.plugin.getServer().broadcastMessage(type.toString());
+        }
     }
 }
 
