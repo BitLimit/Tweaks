@@ -15,8 +15,28 @@ public class BitLimitTweaks extends JavaPlugin {
 
         this.getCommand("tweaks").setExecutor(new TweaksCommandExecutor(this));
 
-        BitLimitTweaksRepeatingTask task = new BitLimitTweaksRepeatingTask();
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, task, 0L, 1200L);
+        class BitLimitRecurringTask implements Runnable {
+            Plugin plugin;
+            
+            BitLimitRecurringTask(Plugin p) {
+                plugin = p;
+            }
+
+            public void run() {
+                World world = plugin.getServer().getWorld(plugin.getConfig().getString("world"));
+                if (!world.hasStorm()) {
+                    this.plugin.getServer().broadcastMessage(ChatColor.GREEN + "Rain decremented!");
+                    int weatherDuration = world.getWeatherDuration();
+                    this.plugin.getServer().broadcastMessage(ChatColor.RED + Integer.toString(world.getWeatherDuration());
+                    world.setWeatherDuration(weatherDuration + 6000);
+                    this.plugin.getServer().broadcastMessage(ChatColor.RED + Integer.toString(world.getWeatherDuration());
+                } else {
+                    this.plugin.getServer().broadcastMessage(ChatColor.RED + "Timer untouched, it's raining!");
+                    this.plugin.getServer().broadcastMessage(ChatColor.RED + Integer.toString(world.getWeatherDuration());
+                }
+            }
+        }
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), 0L, 1200L);
     }
 
     @Override
