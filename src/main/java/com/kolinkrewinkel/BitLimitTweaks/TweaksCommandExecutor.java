@@ -51,7 +51,7 @@ public class TweaksCommandExecutor implements CommandExecutor {
                     argument = capitalizedString(argument);
                 }
                 String newValueString = newValue ? "enabled" : "disabled.";
-                sender.sendMessage(ChatColor.BLUE + argument + " tweaks are now " + ChatColor.GOLD + newValueString);
+                sender.sendMessage(ChatColor.AQUA + argument + " tweaks are now " + ChatColor.GOLD + newValueString);
             } else if (args.length == 1) {
                 String argument = args[0].toLowerCase();
                 if (argument.equals("tnt") || argument.equals("weather") || argument.equals("slimes")) {
@@ -62,15 +62,15 @@ public class TweaksCommandExecutor implements CommandExecutor {
                         argument = capitalizedString(argument);
                     }
                     if (enabled) {
-                        sender.sendMessage(ChatColor.BLUE + argument + ChatColor.GREEN + " tweaks are currently enabled.");
+                        sender.sendMessage(ChatColor.AQUA + argument + ChatColor.GREEN + " tweaks are currently enabled.");
                     } else {
-                        sender.sendMessage(ChatColor.BLUE + argument + ChatColor.RED + " tweaks are currently disabled.");
+                        sender.sendMessage(ChatColor.AQUA + argument + ChatColor.RED + " tweaks are currently disabled.");
                     }
                 } else {
-                    sender.sendMessage(ChatColor.BLUE + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
+                    sender.sendMessage(ChatColor.AQUA + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
                 }
             } else {
-                sender.sendMessage(ChatColor.BLUE + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
+                sender.sendMessage(ChatColor.AQUA + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
             }
 
             // Save
