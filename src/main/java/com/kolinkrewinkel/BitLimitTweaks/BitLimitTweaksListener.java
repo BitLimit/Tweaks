@@ -6,6 +6,7 @@ import java.util.*;
 import org.bukkit.event.*;
 import org.bukkit.*;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent.*;
 import org.bukkit.event.entity.*;
 
 public class BitLimitTweaksListener implements Listener {
@@ -30,10 +31,10 @@ public class BitLimitTweaksListener implements Listener {
 
         EntityType entityType = event.getEntityType();
         SpawnReason reason = event.getSpawnReason();
-        if (entityType == EntityType.SLIME && (reason == SpawnReason.NATURAL || reason == SpawnReason.SLIME_SPLIT)  {
+        if (entityType == EntityType.SLIME && (reason == SpawnReason.NATURAL || reason == SpawnReason.SLIME_SPLIT))  {
             boolean shouldCancel = getRandomBoolean();
             event.setCancelled(shouldCancel);
-            if (event.cancelled()) {
+            if (event.isCancelled()) {
                 this.plugin.getServer().broadcastMessage(ChatColor.GREEN + "Cancelled slime spawning.");
             } else {
                 this.plugin.getServer().broadcastMessage(ChatColor.RED + "Slime spawned.");
