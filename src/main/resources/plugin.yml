@@ -2,7 +2,7 @@ main: com.kolinkrewinkel.BitLimitTweaks.BitLimitTweaks
 name: BitLimitTweaks
 version: ${project.version}
 author: Kolin Krewinkel
-description: BitLimit Tweaks - Code level tweaks for Minecraft PS01 Gameplay
+description: BitLimit Tweaks - Code level tweaks for Minecraft PS* Gameplay
 website: http://github.com/kolinkrewinkel/BitLimitTweaks/
 commands:
     tweaks:
