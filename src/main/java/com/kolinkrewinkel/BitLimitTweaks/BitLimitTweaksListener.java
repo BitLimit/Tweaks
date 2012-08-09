@@ -65,7 +65,100 @@ public class BitLimitTweaksListener implements Listener {
         }
     }
 
+    /******************************************
+    Event Handler: Block Place(BlockPlaceEvent)
+    ----------- Core Event Listener -----------
+    ******************************************/
+    
+    @EventHandler
+    public void onBlockPlaceEvent(BlockPlaceEvent event) {
+        // Event reference
+        // BlockPlaceEvent(Block placedBlock, BlockState replacedBlockState, Block placedAgainst, ItemStack itemInHand, Player thePlayer, boolean canBuild) 
 
+        boolean confinementEnabled = this.plugin.getConfig().getBoolean("enabled-tnt");
+        if (event.getItemInHand().getTypeId() != 46 || !confinementEnabled)
+            return;
+
+        WorldGuardPlugin worldGuard = getWorldGuard();
+        Block block = event.getBlockPlaced();
+        Vector pt = toVector(block.getLocation());
+        LocalPlayer localPlayer = worldGuard.wrapPlayer(event.getPlayer());
+         
+        RegionManager regionManager = worldGuard.getRegionManager(event.getPlayer().getWorld());
+        ApplicableRegionSet set = regionManager.getApplicableRegions(pt);
+        
+        if (set.size() == 0) {
+            event.setCancelled(true);
+        } else {
+            event.setCancelled(!set.isOwnerOfAll(localPlayer));
+        }
+
+        if (event.isCancelled()) {
+            displaySmokeInWorldAtLocation(block.getWorld(), block.getLocation());
+        }
+    }
+
+    /******************************************
+      Event Handler: Explosion Creation (TNT)
+    ----------- Core Event Listener -----------
+    ******************************************/
+    
+    @EventHandler
+    public void onExplosionPrimeEvent(ExplosionPrimeEvent event) {
+        // Event reference
+        // ExplosionPrimeEvent (final Entity what, final float radius, final boolean fire)
+
+        Entity entity = event.getEntity();
+
+        if (entity instanceof TNTPrimed && this.plugin.getConfig("enabled-tnt")) {
+            TNTPrimed tnt = (TNTPrimed)entity;
+            List <Entity> nearbyEntities = tnt.getNearbyEntities(32, 128, 32); // check if player is horizontally within 4 chunks
+            Iterator entityIterator = nearbyEntities.iterator();
+
+            boolean playerNearby = false;
+            while (entityIterator.hasNext()) {
+                Entity nextEntity = (Entity)entityIterator.next();
+                if (nextEntity instanceof Player) 
+                    playerNearby = true;
+            }
+
+            // Required due to Bukkit's broken implementation of explosion prime - only checks if players are nearby so that *someone* is there to ensure it happened, though this includes the hypothetical griefer as well.
+
+            if (!playerNearby) {
+                event.setCancelled(true);
+                displaySmokeInWorldAtLocation(tnt.getWorld(), tnt.getLocation());
+                ItemStack tntItem = new ItemStack(Material.TNT, 1);
+                tnt.getWorld().dropItemNaturally(tnt.getLocation(), tntItem);
+
+                List <Entity> distantEntities = tnt.getNearbyEntities(256, 128, 256); // check if player is horizontally within far render-distance zone
+                Iterator chunkEntities = distantEntities.iterator();
+                while (chunkEntities.hasNext()) {
+                    Entity chunkEntity = (Entity)chunkEntities.next();
+                    if (chunkEntity instanceof Player) {
+                        Player chunkPlayer = (Player)chunkEntity;
+                        chunkPlayer.sendMessage(ChatColor.RED + "TNT explosion within area failed.");
+                        displaySmokeInWorldAtLocation(chunkPlayer.getWorld(), chunkPlayer.getLocation());
+                    }
+                }
+            }
+        }
+    }
+
+    /******************************************
+    External Getter: Returns World Guard Plugin
+    ---------- Dependency Conveneince ---------
+    ******************************************/
+
+    private WorldGuardPlugin getWorldGuard() {
+        Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("WorldGuard");
+     
+        // WorldGuard may not be loaded
+        if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
+            return null; // Maybe you want throw an exception instead
+        }
+     
+        return (WorldGuardPlugin) plugin;
+    }
 
     /*********************************************
     ------------ Conveinience Methods -----------
@@ -74,6 +167,10 @@ public class BitLimitTweaksListener implements Listener {
     public boolean getRandomBoolean() {
         Random random = new Random();
         return random.nextBoolean();
+    }
+
+    private void displaySmokeInWorldAtLocation(World world, Location location) {
+          world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
     }
 }
 
