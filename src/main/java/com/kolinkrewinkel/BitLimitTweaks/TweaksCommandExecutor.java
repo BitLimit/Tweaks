@@ -91,6 +91,7 @@ public class TweaksCommandExecutor implements CommandExecutor {
         } else if (string.equals("disable") || string.equals("disabled") || string.equals("false") || string.equals("NO") || string.equals("no")) {
             return false;
         }
+        return false;
     }
 
     private String capitalizedString(String string)  

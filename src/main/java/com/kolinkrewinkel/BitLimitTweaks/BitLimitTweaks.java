@@ -8,7 +8,7 @@ import org.bukkit.Server;
 import java.util.*;
 
 public class BitLimitTweaks extends JavaPlugin {
-    private final int weatherID;
+    private final int weatherId;
 
     @Override
     public void onEnable() {
@@ -31,13 +31,13 @@ public class BitLimitTweaks extends JavaPlugin {
                 }
             }
         }
-        this.weatherID = this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), 1200L, 1200L);
+        this.weatherId = this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), 1200L, 1200L);
     }
 
     @Override
     public void onDisable() {        
         // save the configuration file, if there are no values, write the defaults.
-        Bukkit.getServer().getScheduler().cancelTask(weatherID);
+        Bukkit.getServer().getScheduler().cancelTask(this.weatherId);
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
     }
