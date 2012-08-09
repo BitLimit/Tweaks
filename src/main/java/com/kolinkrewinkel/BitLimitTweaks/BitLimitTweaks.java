@@ -8,6 +8,7 @@ import org.bukkit.Server;
 import java.util.*;
 
 public class BitLimitTweaks extends JavaPlugin {
+    private final int weatherID;
 
     @Override
     public void onEnable() {
@@ -25,22 +26,18 @@ public class BitLimitTweaks extends JavaPlugin {
             public void run() {
                 World world = plugin.getServer().getWorld(plugin.getConfig().getString("world"));
                 if (!world.hasStorm()) {
-                    this.plugin.getServer().broadcastMessage(ChatColor.GREEN + "Rain decremented!");
                     int weatherDuration = world.getWeatherDuration();
-                    this.plugin.getServer().broadcastMessage(ChatColor.RED + "Natural value: " + Integer.toString(world.getWeatherDuration()));
                     world.setWeatherDuration(weatherDuration + 600);
-                    this.plugin.getServer().broadcastMessage(ChatColor.RED + "Altered Value: " + Integer.toString(world.getWeatherDuration()));
-                } else {
-                    this.plugin.getServer().broadcastMessage(ChatColor.RED + Integer.toString(world.getWeatherDuration()));
                 }
             }
         }
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), 0L, 1200L);
+        this.weatherID = this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), 1200L, 1200L);
     }
 
     @Override
     public void onDisable() {        
         // save the configuration file, if there are no values, write the defaults.
+        Bukkit.getServer().getScheduler().cancelTask(weatherID);
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
     }

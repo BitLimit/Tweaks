@@ -73,6 +73,9 @@ public class TweaksCommandExecutor implements CommandExecutor {
             } else {
                 sender.sendMessage(ChatColor.CYAN + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
             }
+
+            // Save
+            this.plugin.saveConfig();
         } else {
             sender.sendMessage(ChatColor.RED + "You don't have permission to execute this command.");
         }
