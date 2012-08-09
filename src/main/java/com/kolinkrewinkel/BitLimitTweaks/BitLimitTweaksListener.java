@@ -29,16 +29,13 @@ public class BitLimitTweaksListener implements Listener {
     public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
         // CreatureSpawnEvent (Entity spawnee, CreatureType type, Location loc, SpawnReason reason
 
+        // Gather information to determine if these are the slimes we are looking for.
         EntityType entityType = event.getEntityType();
         SpawnReason reason = event.getSpawnReason();
         if (entityType == EntityType.SLIME && (reason == SpawnReason.NATURAL || reason == SpawnReason.SLIME_SPLIT))  {
+            // Pseudo-randomly cancel slime spawns to reduce their numbers.
             boolean shouldCancel = getRandomBoolean();
             event.setCancelled(shouldCancel);
-            if (event.isCancelled()) {
-                this.plugin.getServer().broadcastMessage(ChatColor.GREEN + "Cancelled slime spawning.");
-            } else {
-                this.plugin.getServer().broadcastMessage(ChatColor.RED + "Slime spawned.");
-            }
         }
     }
 
