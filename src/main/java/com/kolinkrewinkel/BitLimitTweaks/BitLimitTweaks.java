@@ -30,7 +30,7 @@ public class BitLimitTweaks extends JavaPlugin {
     public void saveConfig() {
         super.saveConfig();
 
-        this.getServer().broadcastMessage("Called");
+        this.reloadConfig();
         setRepeatingTaskEnabled(this.getConfig().getBoolean("enabled-weather"));
     }
 
@@ -57,7 +57,7 @@ public class BitLimitTweaks extends JavaPlugin {
         } else if (this.weatherId != 0) {
             scheduler.cancelTask(this.weatherId);
             this.weatherId = 0;
-            server.broadcastMessage(ChatColor.BLUE + "Weather recurring task stopped.");
+            server.broadcast(ChatColor.BLUE + "Weather recurring task stopped.", "tweaks.*");
         }
     }
 }
