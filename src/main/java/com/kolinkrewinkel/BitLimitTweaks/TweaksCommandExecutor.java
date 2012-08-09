@@ -27,6 +27,7 @@ public class TweaksCommandExecutor implements CommandExecutor {
 
         if (sender.hasPermission("BitLimitTweaks")) {
             if (args.length > 1) {
+                boolean validParameter = isValidBooleanInput(args[1]);
                 if (args[0].toLowerCase().equals("tnt")) {
 
                 } else if (args[0].toLowerCase().equals("weather")) {
@@ -43,5 +44,9 @@ public class TweaksCommandExecutor implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You don't have permission to execute this command.");
         }
         return false;
+    }
+
+    private boolean isValidBooleanInput(String string) {
+        return string.equals("enable") || string.equals("enabled") || string.equals("true") || string.equals("YES") || string.equals("yes") || string.equals("disable") || string.equals("disabled") || string.equals("false") || string.equals("NO") || string.equals("no");
     }
 }
