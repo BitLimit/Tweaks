@@ -42,7 +42,7 @@ public class TweaksCommandExecutor implements CommandExecutor {
                     config.set("enabled-slimes", newValue);
                 } else {
                     sender.sendMessage(ChatColor.RED + "Invalid parameter. Expected TNT, weather, or slimes.");
-                    return;
+                    return false;
                 }
                 String argument = args[0];
                 if (argument.equals("tnt")) {
