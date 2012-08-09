@@ -17,15 +17,27 @@ public class TweaksCommandExecutor implements CommandExecutor {
     }
     
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        /*  /tweaks tnt enable
+            /tweaks tnt disable
+            /tweaks weather enable
+            /tweaks weather disable
+            /tweaks slimes enable
+            /tweaks slimes disable
+        */
+
         if (sender.hasPermission("BitLimitTweaks")) {
             if (args.length > 1) {
-                if (args[0].equals("weatherDuration")) {
-                    if (sender instanceof Player) {
-                        Player player = (Player)sender;
-                        player.getWorld().setWeatherDuration(Integer.parseInt(args[1]));
-                        player.sendMessage(Integer.toString(player.getWorld().getWeatherDuration()));
-                    }
+                if (args[0].toLowerCase().equals("tnt")) {
+
+                } else if (args[0].toLowerCase().equals("weather")) {
+
+                } else if (args[0].toLowerCase().equals("slimes")) {
+
+                } else {
+                    sender.sendMessage(ChatColor.RED + "Invalid parameter. Expected TNT, weather, or slimes.");
                 }
+            } else {
+                sender.sendMessage(ChatColor.GOLD + "Valid parameters: TNT, weather, or slimes, followed by \"enabled\" or \"disabled\"");
             }
         } else {
             sender.sendMessage(ChatColor.RED + "You don't have permission to execute this command.");

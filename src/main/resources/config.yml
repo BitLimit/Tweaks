@@ -1,2 +1,4 @@
-enabled: true
+enabled-tnt: true
+enabled-weather: true
+enabled-slimes: true
 world: world
