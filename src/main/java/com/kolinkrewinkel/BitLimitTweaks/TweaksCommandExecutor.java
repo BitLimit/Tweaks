@@ -26,22 +26,43 @@ public class TweaksCommandExecutor implements CommandExecutor {
         */
 
         if (sender.hasPermission("BitLimitTweaks")) {
+            FileConfiguration config = this.plugin.getConfig();
+
             if (args.length > 1) {
                 boolean validParameter = isValidBooleanInput(args[1]);
                 if (!validParameter) {
                     sender.sendMessage(ChatColor.RED + "Invalid second parameter: expected *able and its past participle, or standard YES/NO (capitalization agnostic).")
+                    return false;
                 }
+                boolean newValue = parsedBooleanInput(args[1]);
                 if (args[0].toLowerCase().equals("tnt")) {
-
+                    config.setBoolean("enabled-tnt", newValue);
                 } else if (args[0].toLowerCase().equals("weather")) {
-
+                    config.setBoolean("enabled-weather", newValue);
                 } else if (args[0].toLowerCase().equals("slimes")) {
-
+                    config.setBoolean("enabled-slimes", newValue);
                 } else {
                     sender.sendMessage(ChatColor.RED + "Invalid parameter. Expected TNT, weather, or slimes.");
                 }
+            } else if (args.length == 1) {
+                String argument = args[0].toLowerCase();
+                if (argument.equals("tnt") || argument.equals("weather") || argument.equals("slimes")) {
+                    boolean enabled = config.getBoolean("enabled-" + argument);
+                    if (argument.equals("tnt")) {
+                        argument = "TNT";
+                    } else {
+                        argument = capitalizedString(argument);
+                    }
+                    if (enabled) {
+                        sender.sendMessage(ChatColor.CYAN + argument + ChatColor.GREEN + " tweaks are currently enabled.");
+                    } else {
+                        sender.sendMessage(ChatColor.CYAN + argument + ChatColor.RED + " tweaks are currently disabled.");
+                    }
+                } else {
+                    sender.sendMessage(ChatColor.CYAN + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
+                }
             } else {
-                sender.sendMessage(ChatColor.GOLD + "Valid parameters: TNT, weather, or slimes, followed by \"enabled\" or \"disabled\"");
+                sender.sendMessage(ChatColor.CYAN + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
             }
         } else {
             sender.sendMessage(ChatColor.RED + "You don't have permission to execute this command.");
@@ -52,4 +73,17 @@ public class TweaksCommandExecutor implements CommandExecutor {
     private boolean isValidBooleanInput(String string) {
         return string.equals("enable") || string.equals("enabled") || string.equals("true") || string.equals("YES") || string.equals("yes") || string.equals("disable") || string.equals("disabled") || string.equals("false") || string.equals("NO") || string.equals("no");
     }
+
+    private boolean parsedBooleanInput(String string) {
+        if (string.equals("enable") || string.equals("enabled") || string.equals("true") || string.equals("YES") || string.equals("yes")) {
+            return true;
+        } else if (string.equals("disable") || string.equals("disabled") || string.equals("false") || string.equals("NO") || string.equals("no")) {
+            return false;
+        }
+    }
+
+    private String capitalizedString(String string)  
+    {  
+        return Character.toUpperCase(string.charAt(0)) + string.substring(1);  
+    } 
 }
