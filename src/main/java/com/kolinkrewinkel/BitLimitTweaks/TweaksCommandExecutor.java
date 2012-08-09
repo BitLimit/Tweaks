@@ -28,6 +28,9 @@ public class TweaksCommandExecutor implements CommandExecutor {
         if (sender.hasPermission("BitLimitTweaks")) {
             if (args.length > 1) {
                 boolean validParameter = isValidBooleanInput(args[1]);
+                if (!validParameter) {
+                    sender.sendMessage(ChatColor.RED + "Invalid second parameter: expected *able and its past participle, or standard YES/NO (capitalization agnostic).")
+                }
                 if (args[0].toLowerCase().equals("tnt")) {
 
                 } else if (args[0].toLowerCase().equals("weather")) {
