@@ -8,7 +8,7 @@ import org.bukkit.Server;
 import java.util.*;
 
 public class BitLimitTweaks extends JavaPlugin {
-    private final int weatherId;
+    private int weatherId;
 
     @Override
     public void onEnable() {
