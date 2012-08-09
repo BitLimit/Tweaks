@@ -56,7 +56,7 @@ public class BitLimitTweaks extends JavaPlugin {
         } else if (this.weatherId != 0) {
             scheduler.cancelTask(this.weatherId);
             this.weatherId = 0;
-            server.broadcast(ChatColor.BLUE + "Weather recurring task stopped.", "tweaks");
+            server.broadcast(ChatColor.BLUE + "Weather recurring task stopped.", "tweaks.*");
         }
     }
 }
