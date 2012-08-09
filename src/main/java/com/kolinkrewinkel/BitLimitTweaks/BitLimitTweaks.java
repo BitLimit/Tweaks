@@ -5,6 +5,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.Server;
+import org.bukkit.scheduler.BukkitScheduler;
 import java.util.*;
 
 public class BitLimitTweaks extends JavaPlugin {
@@ -25,6 +26,13 @@ public class BitLimitTweaks extends JavaPlugin {
         this.saveConfig();
     }
 
+    @Override
+    public void saveConfig() {
+        super.saveConfig();
+
+        setRepeatingTaskEnabled(this.getConfig().getBoolean("enabled-weather"));
+    }
+
     public void setRepeatingTaskEnabled(boolean enabled) {
         Server server = this.getServer();
         BukkitScheduler scheduler = server.getScheduler();
@@ -37,7 +45,7 @@ public class BitLimitTweaks extends JavaPlugin {
                 }
 
                 public void run() {
-                    World world = server.getWorld(plugin.getConfig().getString("world"));
+                    World world = this.plugin.getServer().getWorld(plugin.getConfig().getString("world"));
                     if (!world.hasStorm()) {
                         int weatherDuration = world.getWeatherDuration();
                         world.setWeatherDuration(weatherDuration + 600);
