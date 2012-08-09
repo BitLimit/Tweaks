@@ -53,11 +53,14 @@ public class BitLimitTweaks extends JavaPlugin {
                     }
                 }
             }
-            this.weatherId = scheduler.scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), 1200L, 1200L);
+            if (this.weatherId == 0)
+                this.weatherId = scheduler.scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), 1200L, 1200L);
+            else
+                server.broadcast(ChatColor.RED + "Internal inconsistency error.  Reload/restart recommended.", "tweaks.*");
+            
         } else if (this.weatherId != 0) {
             scheduler.cancelTask(this.weatherId);
             this.weatherId = 0;
-            server.broadcast(ChatColor.BLUE + "Weather recurring task stopped.", "tweaks.*");
         }
     }
 }
