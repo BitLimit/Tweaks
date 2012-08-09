@@ -87,15 +87,13 @@ public class BitLimitTweaksListener implements Listener {
         RegionManager regionManager = worldGuard.getRegionManager(event.getPlayer().getWorld());
         ApplicableRegionSet set = regionManager.getApplicableRegions(pt);
         
-        if (set.size() == 0) {
+        if (set.size() == 0)
             event.setCancelled(true);
-        } else {
+        else
             event.setCancelled(!set.isOwnerOfAll(localPlayer));
-        }
-
-        if (event.isCancelled()) {
+        
+        if (event.isCancelled())
             displaySmokeInWorldAtLocation(block.getWorld(), block.getLocation());
-        }
     }
 
     /******************************************
