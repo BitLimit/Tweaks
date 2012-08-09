@@ -6,8 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.command.*;
-import org.bukkit.entity.Player;
-import org.bukkit.block.*;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public class TweaksCommandExecutor implements CommandExecutor {
     private final BitLimitTweaks plugin;
@@ -31,7 +30,7 @@ public class TweaksCommandExecutor implements CommandExecutor {
             if (args.length > 1) {
                 boolean validParameter = isValidBooleanInput(args[1]);
                 if (!validParameter) {
-                    sender.sendMessage(ChatColor.RED + "Invalid second parameter: expected *able and its past participle, or standard YES/NO (capitalization agnostic).")
+                    sender.sendMessage(ChatColor.RED + "Invalid second parameter: expected *able and its past participle, or standard YES/NO (capitalization agnostic).");
                     return false;
                 }
                 boolean newValue = parsedBooleanInput(args[1]);
@@ -52,7 +51,7 @@ public class TweaksCommandExecutor implements CommandExecutor {
                     argument = capitalizedString(argument);
                 }
                 String newValueString = newValue ? "enabled" : "disabled.";
-                sender.sendMessage(ChatColor.CYAN + argument + " tweaks are now " + ChatColor.GOLD + newValueString);
+                sender.sendMessage(ChatColor.BLUE + argument + " tweaks are now " + ChatColor.GOLD + newValueString);
             } else if (args.length == 1) {
                 String argument = args[0].toLowerCase();
                 if (argument.equals("tnt") || argument.equals("weather") || argument.equals("slimes")) {
@@ -63,15 +62,15 @@ public class TweaksCommandExecutor implements CommandExecutor {
                         argument = capitalizedString(argument);
                     }
                     if (enabled) {
-                        sender.sendMessage(ChatColor.CYAN + argument + ChatColor.GREEN + " tweaks are currently enabled.");
+                        sender.sendMessage(ChatColor.BLUE + argument + ChatColor.GREEN + " tweaks are currently enabled.");
                     } else {
-                        sender.sendMessage(ChatColor.CYAN + argument + ChatColor.RED + " tweaks are currently disabled.");
+                        sender.sendMessage(ChatColor.BLUE + argument + ChatColor.RED + " tweaks are currently disabled.");
                     }
                 } else {
-                    sender.sendMessage(ChatColor.CYAN + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
+                    sender.sendMessage(ChatColor.BLUE + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
                 }
             } else {
-                sender.sendMessage(ChatColor.CYAN + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
+                sender.sendMessage(ChatColor.BLUE + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
             }
 
             // Save
