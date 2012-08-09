@@ -110,9 +110,9 @@ public class BitLimitTweaksListener implements Listener {
 
         Entity entity = event.getEntity();
 
-        if (entity instanceof TNTPrimed && this.plugin.getConfig("enabled-tnt")) {
+        if (entity instanceof TNTPrimed && this.plugin.getConfig().getBoolean("enabled-tnt")) {
             TNTPrimed tnt = (TNTPrimed)entity;
-            List <Entity> nearbyEntities = tnt.getNearbyEntities(32, 128, 32); // check if player is horizontally within 4 chunks
+            List <Entity> nearbyEntities = tnt.getNearbyEntities(64, 128, 64); // check if player is horizontally within 4 chunks
             Iterator entityIterator = nearbyEntities.iterator();
 
             boolean playerNearby = false;
