@@ -50,8 +50,8 @@ public class TweaksCommandExecutor implements CommandExecutor {
                 } else {
                     argument = capitalizedString(argument);
                 }
-                String newValueString = newValue ? "enabled" : "disabled.";
-                sender.sendMessage(ChatColor.AQUA + argument + " tweaks are now " + ChatColor.GOLD + newValueString);
+                String newValueString = newValue ? "enabled" : "disabled";
+                sender.sendMessage(ChatColor.AQUA + argument + " tweaks are now " + ChatColor.GOLD + newValueString +ChatColor.AQUA + ".");
             } else if (args.length == 1) {
                 String argument = args[0].toLowerCase();
                 if (argument.equals("tnt") || argument.equals("weather") || argument.equals("slimes")) {
