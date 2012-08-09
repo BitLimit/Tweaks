@@ -32,6 +32,10 @@ public class BitLimitTweaksListener implements Listener {
     public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
         // CreatureSpawnEvent (Entity spawnee, CreatureType type, Location loc, SpawnReason reason
 
+        FileConfiguration config = this.plugin.getConfig();
+        if (!config.getBoolean("enabled-slimes"))
+            return;
+
         // Gather information to determine if these are the slimes we are looking for.
         EntityType entityType = event.getEntityType();
         SpawnReason reason = event.getSpawnReason();
