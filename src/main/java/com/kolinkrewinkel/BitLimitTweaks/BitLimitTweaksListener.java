@@ -136,7 +136,7 @@ public class BitLimitTweaksListener implements Listener {
                     Entity chunkEntity = (Entity)chunkEntities.next();
                     if (chunkEntity instanceof Player) {
                         Player chunkPlayer = (Player)chunkEntity;
-                        chunkPlayer.sendMessage(ChatColor.RED + "TNT explosion within area failed.");
+                        chunkPlayer.sendMessage(ChatColor.RED + "TNT explosion within area failed - original item dropped at location.");
                         displaySmokeInWorldAtLocation(chunkPlayer.getWorld(), chunkPlayer.getLocation());
                     }
                 }
