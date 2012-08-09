@@ -36,7 +36,7 @@ public class BitLimitTweaks extends JavaPlugin {
     public void setRepeatingTaskEnabled(boolean enabled) {
         Server server = this.getServer();
         BukkitScheduler scheduler = server.getScheduler();
-        if (enabled) {
+        if (enabled && this.weatherId == 0) {
             class BitLimitRecurringTask implements Runnable {
                 Plugin plugin;
 
@@ -53,10 +53,10 @@ public class BitLimitTweaks extends JavaPlugin {
                 }
             }
             this.weatherId = scheduler.scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), 1200L, 1200L);
-        } else {
+        } else if (this.weatherId != 0) {
             scheduler.cancelTask(this.weatherId);
-            this.weatherId = null;
-            server.broadcastMessage(ChatColor.CYAN + "Weather recurring task stopped.", "tweaks");
+            this.weatherId = 0;
+            server.broadcast(ChatColor.BLUE + "Weather recurring task stopped.", "tweaks");
         }
     }
 }
