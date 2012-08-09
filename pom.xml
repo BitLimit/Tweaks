@@ -35,6 +35,13 @@
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
+    <!-- WorldGuard -->
+    <dependency>
+      <groupId>com.sk89q</groupId>
+      <artifactId>worldguard</artifactId>
+      <version>5.6-SNAPSHOT</version>
+    </dependency>
+
     <!-- Following dependency is provided by CraftBukkit -->
     <dependency>
       <groupId>com.google.guava</groupId>
