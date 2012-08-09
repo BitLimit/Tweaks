@@ -10,7 +10,8 @@ import org.bukkit.event.entity.*;
 
 public class BitLimitTweaksListener implements Listener {
     private final BitLimitTweaks plugin; // Reference main plugin
-    
+    private final Random random;
+
     /******************************************
     Initialization: BitLimitTweaksListener(plugin)
     --------- Designated Initializer ----------
@@ -20,16 +21,29 @@ public class BitLimitTweaksListener implements Listener {
         // Notify plugin manager that this plugin handles implemented events (block place, etc.)
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.plugin = plugin;
+        this.random = new Random();
     }
 
     @EventHandler
     public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
         // CreatureSpawnEvent (Entity spawnee, CreatureType type, Location loc, SpawnReason reason
 
-        EntityType type = event.getEntityType();
-        if (type == EntityType.SLIME) {
-            this.plugin.getServer().broadcastMessage(type.toString());
+        EntityType entityType = event.getEntityType();
+        SpawnReason reason = event.getSpawnReason();
+        if (entityType == EntityType.SLIME && (reason == SpawnReason.NATURAL || reason == SpawnReason.SLIME_SPLIT)  {
+            boolean shouldCancel = getRandomBoolean();
+            event.setCancelled(shouldCancel);
+            if (event.cancelled()) {
+                this.plugin.getServer().broadcastMessage(ChatColor.GREEN + "Cancelled slime spawning.");
+            } else {
+                this.plugin.getServer().broadcastMessage(ChatColor.RED + "Slime spawned.");
+            }
         }
+    }
+
+    public boolean getRandomBoolean() {
+        Random random = new Random();
+        return random.nextBoolean();
     }
 }
 
