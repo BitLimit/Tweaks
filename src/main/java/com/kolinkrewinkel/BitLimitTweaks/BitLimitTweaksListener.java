@@ -11,7 +11,6 @@ import org.bukkit.event.entity.*;
 
 public class BitLimitTweaksListener implements Listener {
     private final BitLimitTweaks plugin; // Reference main plugin
-    private final Random random;
 
     /*********************************************
     Initialization: BitLimitTweaksListener(plugin)
@@ -22,7 +21,6 @@ public class BitLimitTweaksListener implements Listener {
         // Notify plugin manager that this plugin handles implemented events (block place, etc.)
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.plugin = plugin;
-        this.random = new Random();
     }
 
     /*********************************************
