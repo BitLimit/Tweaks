@@ -35,11 +35,11 @@ public class TweaksCommandExecutor implements CommandExecutor {
                 }
                 boolean newValue = parsedBooleanInput(args[1]);
                 if (args[0].toLowerCase().equals("tnt")) {
-                    config.setBoolean("enabled-tnt", newValue);
+                    config.set("enabled-tnt", newValue);
                 } else if (args[0].toLowerCase().equals("weather")) {
-                    config.setBoolean("enabled-weather", newValue);
+                    config.set("enabled-weather", newValue);
                 } else if (args[0].toLowerCase().equals("slimes")) {
-                    config.setBoolean("enabled-slimes", newValue);
+                    config.set("enabled-slimes", newValue);
                 } else {
                     sender.sendMessage(ChatColor.RED + "Invalid parameter. Expected TNT, weather, or slimes.");
                     return;
