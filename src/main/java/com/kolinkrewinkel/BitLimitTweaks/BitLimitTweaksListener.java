@@ -8,6 +8,7 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent.*;
 import org.bukkit.event.entity.*;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public class BitLimitTweaksListener implements Listener {
     private final BitLimitTweaks plugin; // Reference main plugin
