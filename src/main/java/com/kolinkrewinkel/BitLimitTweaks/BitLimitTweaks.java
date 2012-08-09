@@ -15,23 +15,6 @@ public class BitLimitTweaks extends JavaPlugin {
         new BitLimitTweaksListener(this);
 
         this.getCommand("tweaks").setExecutor(new TweaksCommandExecutor(this));
-
-        class BitLimitRecurringTask implements Runnable {
-            Plugin plugin;
-            
-            BitLimitRecurringTask(Plugin p) {
-                plugin = p;
-            }
-
-            public void run() {
-                World world = plugin.getServer().getWorld(plugin.getConfig().getString("world"));
-                if (!world.hasStorm()) {
-                    int weatherDuration = world.getWeatherDuration();
-                    world.setWeatherDuration(weatherDuration + 600);
-                }
-            }
-        }
-        this.weatherId = this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), 1200L, 1200L);
     }
 
     @Override
@@ -40,6 +23,33 @@ public class BitLimitTweaks extends JavaPlugin {
         this.getServer().getScheduler().cancelTask(this.weatherId);
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
+    }
+
+    public void setRepeatingTaskEnabled(boolean enabled) {
+        Server server = this.getServer();
+        BukkitScheduler scheduler = server.getScheduler();
+        if (enabled) {
+            class BitLimitRecurringTask implements Runnable {
+                Plugin plugin;
+
+                BitLimitRecurringTask(Plugin p) {
+                    plugin = p;
+                }
+
+                public void run() {
+                    World world = server.getWorld(plugin.getConfig().getString("world"));
+                    if (!world.hasStorm()) {
+                        int weatherDuration = world.getWeatherDuration();
+                        world.setWeatherDuration(weatherDuration + 600);
+                    }
+                }
+            }
+            this.weatherId = scheduler.scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), 1200L, 1200L);
+        } else {
+            scheduler.cancelTask(this.weatherId);
+            this.weatherId = null;
+            server.broadcastMessage(ChatColor.CYAN + "Weather recurring task stopped.", "tweaks");
+        }
     }
 }
 
