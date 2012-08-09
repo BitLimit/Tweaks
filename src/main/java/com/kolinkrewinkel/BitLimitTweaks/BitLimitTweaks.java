@@ -37,7 +37,7 @@ public class BitLimitTweaks extends JavaPlugin {
     @Override
     public void onDisable() {        
         // save the configuration file, if there are no values, write the defaults.
-        Bukkit.getServer().getScheduler().cancelTask(this.weatherId);
+        this.getServer().getScheduler().cancelTask(this.weatherId);
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
     }
