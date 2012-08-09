@@ -13,10 +13,10 @@ public class BitLimitTweaksListener implements Listener {
     private final BitLimitTweaks plugin; // Reference main plugin
     private final Random random;
 
-    /******************************************
+    /*********************************************
     Initialization: BitLimitTweaksListener(plugin)
-    --------- Designated Initializer ----------
-    ******************************************/
+    ----------- Designated Initializer ----------
+    *********************************************/
 
     public BitLimitTweaksListener(BitLimitTweaks plugin) {
         // Notify plugin manager that this plugin handles implemented events (block place, etc.)
@@ -24,6 +24,11 @@ public class BitLimitTweaksListener implements Listener {
         this.plugin = plugin;
         this.random = new Random();
     }
+
+    /*********************************************
+      Event Handler: onCreatureSpawnEvent(Event)
+    --------------- Event Handler --------------
+    *********************************************/
 
     @EventHandler
     public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
@@ -38,6 +43,10 @@ public class BitLimitTweaksListener implements Listener {
             event.setCancelled(shouldCancel);
         }
     }
+
+    /*********************************************
+    ------------ Conveinience Methods -----------
+    *********************************************/
 
     public boolean getRandomBoolean() {
         Random random = new Random();
