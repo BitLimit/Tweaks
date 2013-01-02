@@ -92,8 +92,10 @@ public class BitLimitTweaksListener implements Listener {
         else
             event.setCancelled(!set.isOwnerOfAll(localPlayer));
         
-        if (event.isCancelled())
+        if (event.isCancelled()) {
             displaySmokeInWorldAtLocation(block.getWorld(), block.getLocation());
+            event.getPlayer().sendMessage(ChatColor.RED + "You are not authorized to place TNT in this location.");
+        }
     }
 
     /******************************************
@@ -121,6 +123,7 @@ public class BitLimitTweaksListener implements Listener {
             }
 
             // Required due to Bukkit's broken implementation of explosion prime - only checks if players are nearby so that *someone* is there to ensure it happened, though this includes the hypothetical griefer as well.
+            // Btw, to the few at Bukkit who keep blocking this: you're really annoying. Don't play semantic bullshit games. Think you're Richard Stallman or something, idiot?
 
             if (!playerNearby) {
                 event.setCancelled(true);
