@@ -4,6 +4,38 @@
 		"selected_items":
 		[
 			[
+				"save",
+				"saveConfig"
+			],
+			[
+				"new",
+				"newValueString"
+			],
+			[
+				"capit",
+				"capitalizedString"
+			],
+			[
+				"to",
+				"toLowerCase"
+			],
+			[
+				"Creat",
+				"CreatureSpawnEvent"
+			],
+			[
+				"Entit",
+				"EntityType"
+			],
+			[
+				"BitL",
+				"BitLimitRecurringTask"
+			],
+			[
+				"Bit",
+				"BitLimitTweaks"
+			],
+			[
 				"cunk",
 				"chunkPlayer"
 			],
@@ -52,10 +84,6 @@
 				"worldguard"
 			],
 			[
-				"BitL",
-				"BitLimitTNT"
-			],
-			[
 				"json",
 				"jsonString"
 			],
@@ -75,54 +103,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "src/main/java/com/kolinkrewinkel/BitLimit Tweaks/BitLimitTweaks.java",
-			"settings":
-			{
-				"buffer_size": 587,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/main/java/com/kolinkrewinkel/BitLimit Tweaks/BitLimitTweaksListener.java",
-			"settings":
-			{
-				"buffer_size": 694,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/main/java/com/kolinkrewinkel/BitLimit Tweaks/TweaksCommandExecutor.java",
-			"settings":
-			{
-				"buffer_size": 625,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/main/resources/config.yml",
-			"settings":
-			{
-				"buffer_size": 13,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/main/resources/plugin.yml",
-			"settings":
-			{
-				"buffer_size": 434,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "pom.xml",
-			"settings":
-			{
-				"buffer_size": 2107,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -149,10 +129,17 @@
 	"file_history":
 	[
 		"/Users/kolin/Projects/BitLimitTweaks/pom.xml",
+		"/Users/kolin/Projects/BitLimitTweaks/src/main/resources/plugin.yml",
+		"/Users/kolin/Projects/BitLimitTweaks/src/main/resources/config.yml",
+		"/Users/kolin/Projects/BitLimitTweaks/src/main/java/com/kolinkrewinkel/BitLimitTweaks/TweaksCommandExecutor.java",
+		"/Users/kolin/Projects/BitLimitTweaks/src/main/java/com/kolinkrewinkel/BitLimitTweaks/BitLimitTweaksListener.java",
+		"/Users/kolin/Projects/BitLimitTweaks/src/main/java/com/kolinkrewinkel/BitLimitTweaks/BitLimitTweaks.java",
+		"/Users/kolin/Projects/BitLimitTNT/src/main/java/com/kolinkrewinkel/BitLimitTNT/TNTCommandExecutor.java",
+		"/Users/kolin/Projects/BitLimitTNT/src/main/java/com/kolinkrewinkel/BitLimitTNT/BitLimitTNTListener.java",
+		"/Users/kolin/Projects/BitLimitTweaks/src/main/java/com/kolinkrewinkel/BitLimitTweaks/BitLimitTweaksRepeatingTask.java",
 		"/Users/kolin/Projects/BitLimitTweaks/src/main/java/com/kolinkrewinkel/BitLimit Tweaks/TweaksCommandExecutor.java",
 		"/Users/kolin/Projects/BitLimitTweaks/src/main/java/com/kolinkrewinkel/BitLimit Tweaks/BitLimitTweaksListener.java",
 		"/Users/kolin/Projects/BitLimitTweaks/src/main/java/com/kolinkrewinkel/BitLimit Tweaks/BitLimitTweaks.java",
-		"/Users/kolin/Projects/BitLimitTweaks/src/main/resources/plugin.yml",
 		"/Users/kolin/Projects/BitLimitTNT/BukkitServer/plugins/Citizens/citizens.yml",
 		"/Users/kolin/Projects/BitLimitTNT/BukkitServer/plugins/Citizens/npc-profiles.yml",
 		"/Users/kolin/Projects/BitLimitTNT/BukkitServer/plugins/Citizens/saves.yml",
@@ -178,6 +165,7 @@
 		"height": 0.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -185,6 +173,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"tweaks",
+			"BLUE",
+			"RED",
+			"broadcastMessage",
+			"broadcast",
+			"setBoolean",
+			"CYAN",
+			"args[1]",
+			"t",
 			"broadcastMessage",
 			"date",
 			"register",
@@ -196,12 +193,15 @@
 			"sendReply",
 			"sendReplay"
 		],
-		"highlight": true,
+		"highlight": false,
 		"in_selection": false,
 		"preserve_case": false,
 		"regex": false,
 		"replace_history":
 		[
+			"AQUA",
+			"set",
+			"BLUE",
 			"dateCreated",
 			"lastName",
 			"firstName"
@@ -210,178 +210,13 @@
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
-		"wrap": true
+		"wrap": false
 	},
 	"groups":
 	[
 		{
-			"selected": 5,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "src/main/java/com/kolinkrewinkel/BitLimit Tweaks/BitLimitTweaks.java",
-					"settings":
-					{
-						"buffer_size": 587,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Java/Java.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/main/java/com/kolinkrewinkel/BitLimit Tweaks/BitLimitTweaksListener.java",
-					"settings":
-					{
-						"buffer_size": 694,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Java/Java.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/main/java/com/kolinkrewinkel/BitLimit Tweaks/TweaksCommandExecutor.java",
-					"settings":
-					{
-						"buffer_size": 625,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Java/Java.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/main/resources/config.yml",
-					"settings":
-					{
-						"buffer_size": 13,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/YAML/YAML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/main/resources/plugin.yml",
-					"settings":
-					{
-						"buffer_size": 434,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/YAML/YAML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "pom.xml",
-					"settings":
-					{
-						"buffer_size": 2107,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/XML/XML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],

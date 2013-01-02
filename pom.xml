@@ -7,7 +7,7 @@
 
   <groupId>com.kolinkrewinkel.BitLimitTweaks</groupId>
   <artifactId>BitLimitTweaks</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
   <name>BitLimitTweaks</name>
   <description>Code level tweaks for BitLimit PS01</description>
 
@@ -31,7 +31,7 @@
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
       <!-- Bukkit API Version, change if out dated -->
-      <version>1.2.5-R4.0</version>
+      <version>1.4.6-R0.3</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
@@ -39,7 +39,7 @@
     <dependency>
       <groupId>com.sk89q</groupId>
       <artifactId>worldguard</artifactId>
-      <version>5.6-SNAPSHOT</version>
+      <version>5.6.6-SNAPSHOT</version>
     </dependency>
 
     <!-- Following dependency is provided by CraftBukkit -->
