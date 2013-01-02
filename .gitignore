@@ -3,6 +3,8 @@ BukkitServer/*
 Server/*
 target/*
 .DS_Store
+*.sublime-project
+*.sublime-workspace
 
 # Package Files #
 *.jar
