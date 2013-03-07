@@ -24,7 +24,7 @@ public class TweaksCommandExecutor implements CommandExecutor {
             /tweaks slimes disable
         */
 
-        if (sender.hasPermission("BitLimitTweaks")) {
+        if (sender.hasPermission("tweaks.*")) {
             FileConfiguration config = this.plugin.getConfig();
 
             if (args.length > 1) {

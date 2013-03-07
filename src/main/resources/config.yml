@@ -1,4 +1,9 @@
-enabled-tnt: true
-enabled-weather: true
-enabled-slimes: true
-world: world
+
+preferences:
+    tnt: true
+    weather: true
+    slimes: true
+
+meta:
+    weather:
+        world: world

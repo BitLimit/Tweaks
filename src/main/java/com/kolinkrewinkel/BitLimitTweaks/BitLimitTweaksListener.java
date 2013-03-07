@@ -11,14 +11,11 @@ import org.bukkit.event.entity.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.metadata.*;
 import org.bukkit.block.Block;
-import org.bukkit.Effect;
-import org.bukkit.World;
-import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.Material;
-import org.bukkit.ChatColor;
 import org.bukkit.event.block.*;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldguard.LocalPlayer;
@@ -146,6 +143,32 @@ public class BitLimitTweaksListener implements Listener {
     }
 
     /******************************************
+      Event Handler: Player Head Kill-Drops
+    ----------- Core Event Listener -----------
+    ******************************************/
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        if (event.getEntity().getKiller() == null)
+            return;
+
+        if (event.getEntity().getKiller() instanceof Player) {
+            ItemStack skullStack = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
+
+            SkullMeta meta = (SkullMeta) skullStack.getItemMeta();
+            meta.setOwner(event.getEntity().getDisplayName());
+
+            Calendar now = Calendar.getInstance();
+            ArrayList lore = new ArrayList();
+            lore.add(ChatColor.AQUA + "Slain by " + ChatColor.GOLD + event.getEntity().getKiller().getDisplayName() + ChatColor.AQUA + " on " + getFriendlyDate(now));
+            meta.setLore(lore);
+            skullStack.setItemMeta(meta);
+
+            event.getDrops().add(skullStack);
+        }
+    }
+
+    /******************************************
     External Getter: Returns World Guard Plugin
     ---------- Dependency Conveneince ---------
     ******************************************/
@@ -173,5 +196,138 @@ public class BitLimitTweaksListener implements Listener {
     private void displaySmokeInWorldAtLocation(World world, Location location) {
           world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
     }
+
+    // Overloaded function to cut down on calling arguments, no default parameters in Java =/
+        private static String getFriendlyDate(Calendar theDate)
+        {
+            return getFriendlyDate(theDate, false);
+        }
+     
+        // Function to get a human readable version of a Calendar object
+        // If verbose is true we slightly expand the date wording
+        private static String getFriendlyDate(Calendar theDate, boolean verbose)
+        {
+            int year       = theDate.get(Calendar.YEAR);
+            int month      = theDate.get(Calendar.MONTH);
+            int dayOfMonth = theDate.get(Calendar.DAY_OF_MONTH);
+            int dayOfWeek  = theDate.get(Calendar.DAY_OF_WEEK);
+     
+            // Get the day of the week as a String.
+            // Note: The Calendar DAY_OF_WEEK property is NOT zero-based, and Sunday is the first day of week.
+            String friendly = "";
+            switch (dayOfWeek)
+            {
+                case 1:
+                    friendly = "Sunday";
+                    break;
+                case 2:
+                    friendly = "Monday";
+                    break;
+                case 3:
+                    friendly = "Tuesday";
+                    break;
+                case 4:
+                    friendly = "Wednesday";
+                    break;
+                case 5:
+                    friendly = "Thursday";
+                    break;
+                case 6:
+                    friendly = "Friday";
+                    break;
+                case 7:
+                    friendly = "Saturday";
+                    break;
+                default:
+                    friendly = "BadDayValue";
+                    break;
+            }
+     
+            // Add padding and the prefix to the day of month
+            if (verbose == true)
+            {
+                friendly += " the " + dayOfMonth;
+            }
+            else
+            {
+                friendly += ", " + dayOfMonth;
+            }
+     
+            String dayString = String.valueOf(dayOfMonth);   // Convert dayOfMonth to String using valueOf
+     
+            // Suffix is "th" for day of day of month values ending in 0, 4, 5, 6, 7, 8, and 9
+            if (dayString.endsWith("0") || dayString.endsWith("4") || dayString.endsWith("5") || dayString.endsWith("6") ||
+                        dayString.endsWith("7") || dayString.endsWith("8") || dayString.endsWith("9") || dayString.equals("13"))
+            {
+                friendly += "th ";
+            } else if (dayString.endsWith("1"))
+            {
+                friendly += "st ";
+            } else if (dayString.endsWith("2"))
+            {
+                friendly += "nd ";
+            } else if (dayString.endsWith("3"))
+            {
+                friendly += "rd ";
+            }
+     
+            // Add more padding if we've been asked to be verbose
+            if (verbose == true)
+            {
+                friendly += "of ";
+            }
+     
+     
+            // Get a friendly version of the month.
+            // Note: The Calendar MONTH property is zero-based to increase the chance of developers making mistakes.
+            switch (month)
+            {
+                case 0:
+                    friendly += "January";
+                    break;
+                case 1:
+                    friendly += "February";
+                    break;
+                case 2:
+                    friendly += "March";
+                    break;
+                case 3:
+                    friendly += "April";
+                    break;
+                case 4:
+                    friendly += "May";
+                    break;
+                case 5:
+                    friendly += "June";
+                    break;
+                case 6:
+                    friendly += "July";
+                    break;
+                case 7:
+                    friendly += "August";
+                    break;
+                case 8:
+                    friendly += "September";
+                    break;
+                case 9:
+                    friendly += "October";
+                    break;
+                case 10:
+                    friendly += "November";
+                    break;
+                case 11:
+                    friendly += "December";
+                    break;
+                default:
+                    friendly += "BadMonthValue";
+                    break;
+            }
+     
+            // Tack on the year and we're done. Phew!
+            friendly += " " + year;     
+     
+            return friendly;
+     
+            } // End of getFriendlyDate function
 }
 

@@ -3,6 +3,7 @@ BukkitServer/*
 Server/*
 target/*
 .DS_Store
+.project
 *.sublime-project
 *.sublime-workspace
 

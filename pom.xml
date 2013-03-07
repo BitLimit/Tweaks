@@ -7,7 +7,7 @@
 
   <groupId>com.kolinkrewinkel.BitLimitTweaks</groupId>
   <artifactId>BitLimitTweaks</artifactId>
-  <version>1.1</version>
+  <version>1.2.1</version>
   <name>BitLimitTweaks</name>
   <description>Code level tweaks for BitLimit PS01</description>
 
