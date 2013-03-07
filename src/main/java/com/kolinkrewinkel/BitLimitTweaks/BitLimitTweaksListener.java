@@ -49,7 +49,7 @@ public class BitLimitTweaksListener implements Listener {
         // CreatureSpawnEvent (Entity spawnee, CreatureType type, Location loc, SpawnReason reason
 
         FileConfiguration config = this.plugin.getConfig();
-        if (!config.getBoolean("enabled-slimes"))
+        if (!config.getConfigurationSection("preferences").getBoolean("slimes"))
             return;
 
         // Gather information to determine if these are the slimes we are looking for.
@@ -72,7 +72,7 @@ public class BitLimitTweaksListener implements Listener {
         // Event reference
         // BlockPlaceEvent(Block placedBlock, BlockState replacedBlockState, Block placedAgainst, ItemStack itemInHand, Player thePlayer, boolean canBuild) 
 
-        boolean confinementEnabled = this.plugin.getConfig().getBoolean("enabled-tnt");
+        boolean confinementEnabled = this.plugin.getConfig().getConfigurationSection("preferences").getBoolean("tnt");
         if (event.getItemInHand().getTypeId() != 46 || !confinementEnabled)
             return;
 
@@ -107,7 +107,7 @@ public class BitLimitTweaksListener implements Listener {
 
         Entity entity = event.getEntity();
 
-        if (entity instanceof TNTPrimed && this.plugin.getConfig().getBoolean("enabled-tnt")) {
+        if (entity instanceof TNTPrimed && this.plugin.getConfig().getConfigurationSection("preferences").getBoolean("tnt")) {
             TNTPrimed tnt = (TNTPrimed)entity;
             List <Entity> nearbyEntities = tnt.getNearbyEntities(64, 128, 64); // check if player is horizontally within 4 chunks
             Iterator entityIterator = nearbyEntities.iterator();
@@ -190,7 +190,14 @@ public class BitLimitTweaksListener implements Listener {
 
     public boolean getRandomBoolean() {
         Random random = new Random();
-        return random.nextBoolean();
+        int min = 3; // Bias it to be 5:2::true:false.
+        int max = 10;
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int randomNum = random.nextInt(max - min + 1) + min;
+
+        return randomNum > 5;
     }
 
     private void displaySmokeInWorldAtLocation(World world, Location location) {
