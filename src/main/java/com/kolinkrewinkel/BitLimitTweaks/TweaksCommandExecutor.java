@@ -4,6 +4,8 @@ import java.util.*;
 import com.google.common.base.Joiner;
 import org.bukkit.ChatColor;
 import org.bukkit.*;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,21 +31,47 @@ public class TweaksCommandExecutor implements CommandExecutor {
 
             if (args.length > 1) {
                 boolean validParameter = isValidBooleanInput(args[1]);
-                if (!validParameter) {
+                if (!validParameter && !args[1].toLowerCase().equals("location")) {
                     sender.sendMessage(ChatColor.RED + "Invalid second parameter: expected *able and its past participle, or standard YES/NO (capitalization agnostic).");
                     return false;
                 }
                 boolean newValue = parsedBooleanInput(args[1]);
+                ConfigurationSection configurationSection = config.getConfigurationSection("preferences");
+
                 if (args[0].toLowerCase().equals("tnt")) {
-                    config.set("enabled-tnt", newValue);
+                    configurationSection.set("tnt", newValue);
                 } else if (args[0].toLowerCase().equals("weather")) {
-                    config.set("enabled-weather", newValue);
+                    configurationSection.set("weather", newValue);
                 } else if (args[0].toLowerCase().equals("slimes")) {
-                    config.set("enabled-slimes", newValue);
+                    configurationSection.set("slimes", newValue);
+                } else if (args[0].toLowerCase().equals("spawnitems")) {
+
+                    if (args[1].toLowerCase().equals("location")) {
+
+                        try {
+                            ConfigurationSection section = config.getConfigurationSection("meta").createSection("spawnItems").createSection("location");
+
+                            if (sender instanceof Player) {
+                                Player player = (Player)sender;
+                                this.putLocationInSection(player.getLocation(), section);
+                                sender.sendMessage(ChatColor.GREEN + "Location set successfully.");
+                            } else {
+                                sender.sendMessage(ChatColor.RED + "Sender must be player.");
+                            }
+
+                            return true;
+                        } catch (Exception e) {
+
+                        }
+
+                    } else {
+                        configurationSection.set("spawnItems", newValue);
+                    }
                 } else {
                     sender.sendMessage(ChatColor.RED + "Invalid parameter. Expected TNT, weather, or slimes.");
                     return false;
                 }
+
                 String argument = args[0];
                 if (argument.equals("tnt")) {
                     argument = "TNT";
@@ -54,7 +82,7 @@ public class TweaksCommandExecutor implements CommandExecutor {
                 sender.sendMessage(ChatColor.AQUA + argument + " tweaks are now " + ChatColor.GOLD + newValueString +ChatColor.AQUA + ".");
             } else if (args.length == 1) {
                 String argument = args[0].toLowerCase();
-                if (argument.equals("tnt") || argument.equals("weather") || argument.equals("slimes")) {
+                if (argument.equals("tnt") || argument.equals("weather") || argument.equals("slimes") || argument.equals("spawnItems")) {
                     boolean enabled = config.getBoolean("enabled-" + argument);
                     if (argument.equals("tnt")) {
                         argument = "TNT";
@@ -67,10 +95,10 @@ public class TweaksCommandExecutor implements CommandExecutor {
                         sender.sendMessage(ChatColor.AQUA + argument + ChatColor.RED + " tweaks are currently disabled.");
                     }
                 } else {
-                    sender.sendMessage(ChatColor.AQUA + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
+                    sender.sendMessage(ChatColor.AQUA + "Valid parameters: TNT, weather, slimes, or spawnItems to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
                 }
             } else {
-                sender.sendMessage(ChatColor.AQUA + "Valid parameters: TNT, weather, or slimes to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
+                sender.sendMessage(ChatColor.AQUA + "Valid parameters: TNT, weather, slimes, or spawnItems to query state, optionally, followed by \"enabled\" or \"disabled\" to set.");
             }
 
             // Save
@@ -97,5 +125,14 @@ public class TweaksCommandExecutor implements CommandExecutor {
     private String capitalizedString(String string)  
     {  
         return Character.toUpperCase(string.charAt(0)) + string.substring(1);  
-    } 
+    }
+
+    public void putLocationInSection(Location location, ConfigurationSection configurationSection) {
+        configurationSection.set("world", location.getWorld().getName());
+        configurationSection.set("x", location.getX());
+        configurationSection.set("y", location.getY());
+        configurationSection.set("z", location.getZ());
+        configurationSection.set("yaw", location.getYaw());
+        configurationSection.set("pitch", location.getPitch());
+    }
 }

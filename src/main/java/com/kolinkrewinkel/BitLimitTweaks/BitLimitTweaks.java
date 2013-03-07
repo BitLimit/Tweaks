@@ -51,8 +51,8 @@ public class BitLimitTweaks extends JavaPlugin {
 
                     if (!world.hasStorm()) {
                         int weatherDuration = world.getWeatherDuration();
-                        int ratio = (int)0.75; // 75% less often.
-                        int calculatedAddback = 1200 * ratio;
+                        double ratio = 0.75; // 75% less often.
+                        int calculatedAddback = (int)(1200 * ratio);
                         world.setWeatherDuration(weatherDuration + calculatedAddback);
                     }
                 }

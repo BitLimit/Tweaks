@@ -3,7 +3,7 @@ preferences:
     tnt: true
     weather: true
     slimes: true
-
+    spawnItems: false
 meta:
     weather:
         world: world

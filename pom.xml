@@ -7,9 +7,9 @@
 
   <groupId>com.kolinkrewinkel.BitLimitTweaks</groupId>
   <artifactId>BitLimitTweaks</artifactId>
-  <version>1.2.1</version>
+  <version>1.3</version>
   <name>BitLimitTweaks</name>
-  <description>Code level tweaks for BitLimit PS01</description>
+  <description>Code level tweaks for BitLimit PS01.</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
