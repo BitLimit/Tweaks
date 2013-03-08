@@ -2,9 +2,12 @@ package com.kolinkrewinkel.BitLimitTweaks;
 
 import com.sk89q.worldedit.blocks.BaseItemStack;
 import com.sk89q.worldedit.blocks.ChestBlock;
+import com.sk89q.worldguard.blacklist.events.BlockInteractBlacklistEvent;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import java.util.*;
 
@@ -78,25 +81,98 @@ public class BitLimitTweaksListener implements Listener {
         // BlockPlaceEvent(Block placedBlock, BlockState replacedBlockState, Block placedAgainst, ItemStack itemInHand, Player thePlayer, boolean canBuild) 
 
         boolean confinementEnabled = this.plugin.getConfig().getConfigurationSection("preferences").getBoolean("tnt");
-        if (event.getItemInHand().getTypeId() != 46 || !confinementEnabled)
+
+        if (event.getItemInHand().getType() == Material.TNT && confinementEnabled) {
+            WorldGuardPlugin worldGuard = getWorldGuard();
+            Block block = event.getBlockPlaced();
+            Vector pt = toVector(block.getLocation());
+            LocalPlayer localPlayer = worldGuard.wrapPlayer(event.getPlayer());
+
+            RegionManager regionManager = worldGuard.getRegionManager(event.getPlayer().getWorld());
+            ApplicableRegionSet set = regionManager.getApplicableRegions(pt);
+
+            if (set.size() == 0)
+                event.setCancelled(true);
+            else
+                event.setCancelled(!set.isOwnerOfAll(localPlayer));
+
+            if (event.isCancelled()) {
+                displaySmokeInWorldAtLocation(block.getWorld(), block.getLocation());
+                event.getPlayer().sendMessage(ChatColor.RED + "You are not authorized to place TNT in this location.");
+            }
+        }
+
+        if (event.getItemInHand().getType() == Material.SKULL_ITEM || event.getItemInHand().getType() == Material.SKULL) {
+            if (event.getItemInHand().getItemMeta().getLore() == null)
+                return;
+
+            if (event.getItemInHand().getItemMeta().getLore().size() == 0)
+                return;
+
+            SkullMeta skullMeta = (SkullMeta)event.getItemInHand().getItemMeta();
+
+            List<String> meta = event.getItemInHand().getItemMeta().getLore();
+            StringBuilder builder = new StringBuilder();
+            for (String value : meta) {
+                builder.append(value);
+            }
+
+            String builtString = builder.toString();
+            String strippedString = ChatColor.stripColor(builtString);
+            builtString = builtString.replaceFirst(strippedString.substring(0, 1), strippedString.substring(0, 1).toLowerCase());
+
+            event.getBlockPlaced().setMetadata("com.kolinkrewinkel.BitLimitTweaks.display", new FixedMetadataValue(this.plugin, ChatColor.YELLOW + skullMeta.getOwner() + ChatColor.AQUA + " was " + builtString));
+            event.getBlockPlaced().setMetadata("com.kolinkrewinkel.BitLimitTweaks.lore", new FixedMetadataValue(this.plugin, skullMeta.getLore()));
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteractEvent(PlayerInteractEvent event) {
+
+        Block block = event.getClickedBlock();
+        if (block == null)
             return;
 
-        WorldGuardPlugin worldGuard = getWorldGuard();
-        Block block = event.getBlockPlaced();
-        Vector pt = toVector(block.getLocation());
-        LocalPlayer localPlayer = worldGuard.wrapPlayer(event.getPlayer());
+        if (!block.hasMetadata("com.kolinkrewinkel.BitLimitTweaks.display"))
+            return;
 
-        RegionManager regionManager = worldGuard.getRegionManager(event.getPlayer().getWorld());
-        ApplicableRegionSet set = regionManager.getApplicableRegions(pt);
+        List<MetadataValue> metadataValueList = event.getClickedBlock().getMetadata("com.kolinkrewinkel.BitLimitTweaks.display");
 
-        if (set.size() == 0)
+        if (metadataValueList.size() > 0) {
+            Player player = event.getPlayer();
+
+            for (MetadataValue metadataValue : metadataValueList) {
+                String metaString = metadataValue.asString();
+                player.sendMessage(metaString);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockBreakEvent(BlockBreakEvent event) {
+        Block block = event.getBlock();
+        if (block.hasMetadata("com.kolinkrewinkel.BitLimitTweaks.display"))
+            block.removeMetadata("com.kolinkrewinkel.BitLimitTweaks.display", this.plugin);
+
+
+        if (block.hasMetadata("com.kolinkrewinkel.BitLimitTweaks.lore")) {
+            List<MetadataValue> metadataValueList = block.getMetadata("com.kolinkrewinkel.BitLimitTweaks.lore");
+            ItemStack itemStack = (ItemStack)block.getDrops().iterator().next();
+
+            ArrayList<String> lore = new ArrayList<String>();
+            for (MetadataValue metadataValue : metadataValueList) {
+                lore.add(metadataValue.asString().substring(1, metadataValue.asString().length() - 1));
+            }
+
+            ItemMeta newMeta = itemStack.getItemMeta();
+            newMeta.setLore(lore);
+            itemStack.setItemMeta(newMeta);
+
+            block.getLocation().getWorld().dropItemNaturally(block.getLocation(), itemStack);
             event.setCancelled(true);
-        else
-            event.setCancelled(!set.isOwnerOfAll(localPlayer));
+            block.setType(Material.AIR);
 
-        if (event.isCancelled()) {
-            displaySmokeInWorldAtLocation(block.getWorld(), block.getLocation());
-            event.getPlayer().sendMessage(ChatColor.RED + "You are not authorized to place TNT in this location.");
+            block.removeMetadata("com.kolinkrewinkel.BitLimitTweaks.lore", this.plugin);
         }
     }
 
