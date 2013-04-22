@@ -1,12 +1,9 @@
 package com.kolinkrewinkel.BitLimitTweaks;
 
-import java.util.*;
-import com.google.common.base.Joiner;
 import org.bukkit.ChatColor;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.FileConfiguration;
 
