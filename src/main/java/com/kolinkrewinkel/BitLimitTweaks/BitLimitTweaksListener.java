@@ -5,6 +5,7 @@ import com.sk89q.worldedit.blocks.ChestBlock;
 import com.sk89q.worldguard.blacklist.events.BlockInteractBlacklistEvent;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -159,16 +160,19 @@ public class BitLimitTweaksListener implements Listener {
             List<MetadataValue> metadataValueList = block.getMetadata("com.kolinkrewinkel.BitLimitTweaks.lore");
             ItemStack itemStack = (ItemStack)block.getDrops().iterator().next();
 
-            ArrayList<String> lore = new ArrayList<String>();
-            for (MetadataValue metadataValue : metadataValueList) {
-                lore.add(metadataValue.asString().substring(1, metadataValue.asString().length() - 1));
+            if (event.getPlayer().getItemInHand().containsEnchantment(Enchantment.SILK_TOUCH) || event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+                ArrayList<String> lore = new ArrayList<String>();
+                for (MetadataValue metadataValue : metadataValueList) {
+                    lore.add(metadataValue.asString().substring(1, metadataValue.asString().length() - 1));
+                }
+
+                ItemMeta newMeta = itemStack.getItemMeta();
+                newMeta.setLore(lore);
+                itemStack.setItemMeta(newMeta);
             }
 
-            ItemMeta newMeta = itemStack.getItemMeta();
-            newMeta.setLore(lore);
-            itemStack.setItemMeta(newMeta);
-
             block.getLocation().getWorld().dropItemNaturally(block.getLocation(), itemStack);
+
             event.setCancelled(true);
             block.setType(Material.AIR);
 
@@ -239,12 +243,14 @@ public class BitLimitTweaksListener implements Listener {
             SkullMeta meta = (SkullMeta)skullStack.getItemMeta();
             meta.setOwner(event.getEntity().getDisplayName());
 
-            Calendar now = Calendar.getInstance();
-            ArrayList lore = new ArrayList();
-            lore.add(ChatColor.AQUA + "Slain by " + ChatColor.GOLD + event.getEntity().getKiller().getDisplayName() + ChatColor.AQUA + " on " + getFriendlyDate(now));
-            meta.setLore(lore);
-            skullStack.setItemMeta(meta);
+            Player killer = event.getEntity().getKiller();
+            if (killer.getItemInHand().containsEnchantment(Enchantment.SILK_TOUCH)) {
+                ArrayList lore = new ArrayList();
+                lore.add(ChatColor.AQUA + "Slain by " + ChatColor.GOLD + event.getEntity().getKiller().getDisplayName() + ChatColor.AQUA + " on " + getFriendlyDate(Calendar.getInstance()));
+                meta.setLore(lore);
+            }
 
+            skullStack.setItemMeta(meta);
             event.getDrops().add(skullStack);
         }
     }

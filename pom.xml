@@ -7,9 +7,9 @@
 
   <groupId>com.kolinkrewinkel.BitLimitTweaks</groupId>
   <artifactId>BitLimitTweaks</artifactId>
-  <version>1.4</version>
+  <version>1.4.5</version>
   <name>BitLimitTweaks</name>
-  <description>Code level tweaks for BitLimit PS01.</description>
+  <description>Code level tweaks for BitLimit Private Survival.</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,7 +31,7 @@
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
       <!-- Bukkit API Version, change if out dated -->
-      <version>1.4.6-R0.3</version>
+      <version>1.5.1-R0.2</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
