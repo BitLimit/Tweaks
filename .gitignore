@@ -6,7 +6,8 @@ target/*
 .project
 *.sublime-project
 *.sublime-workspace
-
+.idea/
+BitLimitTweaks.iml
 # Package Files #
 *.jar
 *.war
