@@ -21,7 +21,7 @@ Developed for the [BitLimit](http://maps.bitlimit.com/) community, a top-notch [
 * **/tweaks**  
 Returns list of potential commands.
 
-* **/tweaaks (TNT/tnt|slimes|weather)**  
+* **/tweaks (TNT/tnt|slimes|weather)**
 Returns the current state of the passed tweak.  Defined in config.yml under enabled-*.
 
 * **/tweaks (TNT/tnt|slimes|weather) state**  
