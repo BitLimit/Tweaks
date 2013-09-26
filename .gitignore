@@ -6,6 +6,7 @@ target/*
 .project
 *.sublime-project
 *.sublime-workspace
+.idea/
 
 # Package Files #
 *.jar
