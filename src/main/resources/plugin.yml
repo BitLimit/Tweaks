@@ -1,12 +1,12 @@
 main: com.kolinkrewinkel.BitLimitTweaks.BitLimitTweaks
 name: BitLimitTweaks
-version: ${project.version}
+version: 1.4.6
 author: Kolin Krewinkel
 description: Code-level runtime tweaks for BitLimit Private Survival.
-website: http://github.com/kolinkrewinkel/BitLimitTweaks/
+website: http://github.com/BitLimit/Tweaks/
 commands:
     tweaks:
-        description: Undefined
+        description: /tweaks  [tnt|slimes|weather] [state] to set the state or omit the state to return the current config status.
 permissions:
     tweaks.*:
         description: Gives all permissions of BitLimit Tweaks plugin toggling.
