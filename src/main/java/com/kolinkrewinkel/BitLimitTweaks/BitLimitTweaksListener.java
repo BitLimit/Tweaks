@@ -176,54 +176,8 @@ public class BitLimitTweaksListener implements Listener {
         }
     }
 
-    /******************************************
-     Event Handler: Explosion Creation (TNT)
-     ----------- Core Event Listener -----------
-     ******************************************/
 
-    @EventHandler
-    public void onExplosionPrimeEvent(ExplosionPrimeEvent event) {
-        // Event reference
-        // ExplosionPrimeEvent (final Entity what, final float radius, final boolean fire)
-
-        Entity entity = event.getEntity();
-
-        if (entity instanceof TNTPrimed && this.plugin.getConfig().getConfigurationSection("preferences").getBoolean("tnt")) {
-            TNTPrimed tnt = (TNTPrimed)entity;
-            List <Entity> nearbyEntities = tnt.getNearbyEntities(64, 128, 64); // check if player is horizontally within 4 chunks
-            Iterator entityIterator = nearbyEntities.iterator();
-
-            boolean playerNearby = false;
-            while (entityIterator.hasNext()) {
-                Entity nextEntity = (Entity)entityIterator.next();
-                if (nextEntity instanceof Player)
-                    playerNearby = true;
-            }
-
-            // Required due to Bukkit's broken implementation of explosion prime - only checks if players are nearby so that *someone* is there to ensure it happened, though this includes the hypothetical griefer as well.
-            // Btw, to the few at Bukkit who keep blocking this: you're really annoying. Don't play semantic bullshit games. Think you're Richard Stallman or something, idiot?
-
-            if (!playerNearby) {
-                event.setCancelled(true);
-                displaySmokeInWorldAtLocation(tnt.getWorld(), tnt.getLocation());
-                ItemStack tntItem = new ItemStack(Material.TNT, 1);
-                tnt.getWorld().dropItemNaturally(tnt.getLocation(), tntItem);
-
-                List <Entity> distantEntities = tnt.getNearbyEntities(256, 128, 256); // check if player is horizontally within far render-distance zone
-                Iterator chunkEntities = distantEntities.iterator();
-                while (chunkEntities.hasNext()) {
-                    Entity chunkEntity = (Entity)chunkEntities.next();
-                    if (chunkEntity instanceof Player) {
-                        Player chunkPlayer = (Player)chunkEntity;
-                        chunkPlayer.sendMessage(ChatColor.RED + "TNT explosion within area failed - original item dropped at location.");
-                        displaySmokeInWorldAtLocation(chunkPlayer.getWorld(), chunkPlayer.getLocation());
-                    }
-                }
-            }
-        }
-    }
-
-    /******************************************
+     /******************************************
      Event Handler: Player Head Kill-Drops
      ----------- Core Event Listener -----------
      ******************************************/
