@@ -188,7 +188,7 @@ public class TweaksListener implements Listener {
             return;
 
         if (event.getEntity().getKiller() instanceof Player) {
-            ItemStack skullStack = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
+            ItemStack skullStack = new ItemStack(Material.SKU, 1, (byte)3);
 
             SkullMeta meta = (SkullMeta)skullStack.getItemMeta();
             meta.setOwner(event.getEntity().getDisplayName());
