@@ -1,24 +1,24 @@
-package com.kolinkrewinkel.BitLimitTweaks;
+package com.bitlimit.Tweaks;
 
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.World;
 import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-public class BitLimitTweaks extends JavaPlugin {
+public class Tweaks extends JavaPlugin {
     private int weatherId;
 
     @Override
     public void onEnable() {
-        new BitLimitTweaksListener(this);
+        new TweaksListener(this);
 
         this.getCommand("tweaks").setExecutor(new TweaksCommandExecutor(this));
         this.saveConfig();
     }
 
     @Override
-    public void onDisable() {        
+    public void onDisable() {
         this.getServer().getScheduler().cancelTask(this.weatherId);
         this.saveConfig();
     }

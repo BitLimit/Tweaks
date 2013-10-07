@@ -5,10 +5,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.kolinkrewinkel.BitLimitTweaks</groupId>
-  <artifactId>BitLimitTweaks</artifactId>
-  <version>1.4.5</version>
-  <name>BitLimitTweaks</name>
+  <groupId>com.bitlimit.Tweaks</groupId>
+  <artifactId>Tweaks</artifactId>
+  <version>1.5.0</version>
+  <name>Tweaks</name>
   <description>Code level tweaks for BitLimit Private Survival.</description>
 
   <properties>
@@ -31,7 +31,7 @@
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
       <!-- Bukkit API Version, change if out dated -->
-      <version>1.5.1-R0.2</version>
+      <version>1.6.2-R1.0</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>

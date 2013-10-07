@@ -1,4 +1,4 @@
-package com.kolinkrewinkel.BitLimitTweaks;
+package com.bitlimit.Tweaks;
 
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
@@ -30,15 +30,15 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import static com.sk89q.worldguard.bukkit.BukkitUtil.*;
 
-public class BitLimitTweaksListener implements Listener {
-    private final BitLimitTweaks plugin; // Reference main plugin
+public class TweaksListener implements Listener {
+    private final Tweaks plugin; // Reference main plugin
 
     /*********************************************
-     Initialization: BitLimitTweaksListener(plugin)
+     Initialization: TweaksListener(plugin)
      ----------- Designated Initializer ----------
      *********************************************/
 
-    public BitLimitTweaksListener(BitLimitTweaks plugin) {
+    public TweaksListener(Tweaks plugin) {
         // Notify plugin manager that this plugin handles implemented events (block place, etc.)
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.plugin = plugin;
@@ -118,8 +118,8 @@ public class BitLimitTweaksListener implements Listener {
             String strippedString = ChatColor.stripColor(builtString);
             builtString = builtString.replaceFirst(strippedString.substring(0, 1), strippedString.substring(0, 1).toLowerCase());
 
-            event.getBlockPlaced().setMetadata("com.kolinkrewinkel.BitLimitTweaks.display", new FixedMetadataValue(this.plugin, ChatColor.YELLOW + skullMeta.getOwner() + ChatColor.AQUA + " was " + builtString));
-            event.getBlockPlaced().setMetadata("com.kolinkrewinkel.BitLimitTweaks.lore", new FixedMetadataValue(this.plugin, skullMeta.getLore()));
+            event.getBlockPlaced().setMetadata("com.bitlimit.Tweaks.display", new FixedMetadataValue(this.plugin, ChatColor.YELLOW + skullMeta.getOwner() + ChatColor.AQUA + " was " + builtString));
+            event.getBlockPlaced().setMetadata("com.bitlimit.Tweaks.lore", new FixedMetadataValue(this.plugin, skullMeta.getLore()));
         }
     }
 
@@ -130,10 +130,10 @@ public class BitLimitTweaksListener implements Listener {
         if (block == null)
             return;
 
-        if (!block.hasMetadata("com.kolinkrewinkel.BitLimitTweaks.display"))
+        if (!block.hasMetadata("com.bitlimit.Tweaks.display"))
             return;
 
-        List<MetadataValue> metadataValueList = event.getClickedBlock().getMetadata("com.kolinkrewinkel.BitLimitTweaks.display");
+        List<MetadataValue> metadataValueList = event.getClickedBlock().getMetadata("com.bitlimit.Tweaks.display");
 
         if (metadataValueList.size() > 0) {
             Player player = event.getPlayer();
@@ -148,12 +148,12 @@ public class BitLimitTweaksListener implements Listener {
     @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent event) {
         Block block = event.getBlock();
-        if (block.hasMetadata("com.kolinkrewinkel.BitLimitTweaks.display"))
-            block.removeMetadata("com.kolinkrewinkel.BitLimitTweaks.display", this.plugin);
+        if (block.hasMetadata("com.bitlimit.Tweaks.display"))
+            block.removeMetadata("com.bitlimit.Tweaks.display", this.plugin);
 
 
-        if (block.hasMetadata("com.kolinkrewinkel.BitLimitTweaks.lore")) {
-            List<MetadataValue> metadataValueList = block.getMetadata("com.kolinkrewinkel.BitLimitTweaks.lore");
+        if (block.hasMetadata("com.bitlimit.Tweaks.lore")) {
+            List<MetadataValue> metadataValueList = block.getMetadata("com.bitlimit.Tweaks.lore");
             ItemStack itemStack = (ItemStack)block.getDrops().iterator().next();
 
             if (event.getPlayer().getItemInHand().containsEnchantment(Enchantment.SILK_TOUCH) || event.getPlayer().getGameMode() == GameMode.CREATIVE) {
@@ -172,12 +172,12 @@ public class BitLimitTweaksListener implements Listener {
             event.setCancelled(true);
             block.setType(Material.AIR);
 
-            block.removeMetadata("com.kolinkrewinkel.BitLimitTweaks.lore", this.plugin);
+            block.removeMetadata("com.bitlimit.Tweaks.lore", this.plugin);
         }
     }
 
 
-     /******************************************
+    /******************************************
      Event Handler: Player Head Kill-Drops
      ----------- Core Event Listener -----------
      ******************************************/
@@ -206,7 +206,7 @@ public class BitLimitTweaksListener implements Listener {
     }
 
     /******************************************
-          Event Handler: First Join Events
+     Event Handler: First Join Events
      --------------- Core Event ----------------
      *****************************************/
 

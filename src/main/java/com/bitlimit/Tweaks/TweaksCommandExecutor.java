@@ -1,4 +1,4 @@
-package com.kolinkrewinkel.BitLimitTweaks;
+package com.bitlimit.Tweaks;
 
 import org.bukkit.ChatColor;
 import org.bukkit.*;
@@ -8,12 +8,13 @@ import org.bukkit.command.*;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class TweaksCommandExecutor implements CommandExecutor {
-    private final BitLimitTweaks plugin;
-    
-    public TweaksCommandExecutor(BitLimitTweaks plugin) {
+    private final Tweaks plugin;
+
+
+    public TweaksCommandExecutor(Tweaks plugin) {
         this.plugin = plugin;
     }
-    
+
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         /*  /tweaks tnt enable
             /tweaks tnt disable
@@ -119,9 +120,9 @@ public class TweaksCommandExecutor implements CommandExecutor {
         return false;
     }
 
-    private String capitalizedString(String string)  
-    {  
-        return Character.toUpperCase(string.charAt(0)) + string.substring(1);  
+    private String capitalizedString(String string)
+    {
+        return Character.toUpperCase(string.charAt(0)) + string.substring(1);
     }
 
     public void putLocationInSection(Location location, ConfigurationSection configurationSection) {
