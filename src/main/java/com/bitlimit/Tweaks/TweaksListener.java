@@ -62,7 +62,7 @@ public class TweaksListener implements Listener {
         SpawnReason reason = event.getSpawnReason();
         if (entityType == EntityType.SLIME && (reason == SpawnReason.NATURAL || reason == SpawnReason.SLIME_SPLIT))  {
             // Pseudo-randomly cancel slime spawns to reduce their numbers.
-            boolean shouldCancel = getRandomBoolean();
+            boolean shouldCancel = getRandomBoolean(0.75F);
             event.setCancelled(shouldCancel);
         }
     }
@@ -259,16 +259,11 @@ public class TweaksListener implements Listener {
         return location;
     }
 
-    public boolean getRandomBoolean() {
+    public boolean getRandomBoolean(float probability)
+    {
         Random random = new Random();
-        int min = 3; // Bias it to be 5:2::true:false.
-        int max = 10;
 
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
-        int randomNum = random.nextInt(max - min + 1) + min;
-
-        return randomNum > 5;
+        return random.nextInt(10) < (probability * 10);
     }
 
     private void displaySmokeInWorldAtLocation(World world, Location location) {
