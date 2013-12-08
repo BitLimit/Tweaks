@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import java.util.*;
@@ -174,11 +175,13 @@ public class TweaksListener implements Listener {
 
             block.removeMetadata("com.bitlimit.Tweaks.lore", this.plugin);
         }
+
+
     }
 
 
     /******************************************
-            Event Handler: Head Kill-Drops
+              Event Handler: Head Drops
      ----------- Core Event Listener -----------
      ******************************************/
 
@@ -210,21 +213,75 @@ public class TweaksListener implements Listener {
 	{
 		Entity entity = event.getEntity();
 
-		if (!MHFNames().containsKey(entity.getType()) /* || getRandomBoolean(0.99F) */)
+		if (entity instanceof Skeleton)
+		{
+			Skeleton skeleton = (Skeleton)entity;
+			if (skeleton.getSkeletonType() == Skeleton.SkeletonType.WITHER)
+			{
+				return;
+			}
+		}
+
+		if (!MHFNames().containsKey(entity.getType()) || getRandomBoolean(0.99F))
 		{
 			 return;
 		}
 
-		ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
+		String MHFName = getMHFNameForEntity(entity);
 
-		SkullMeta meta = (SkullMeta)head.getItemMeta();
-		meta.setOwner(getMHFNameForEntity(entity));
+		ItemStack head = null;
+		if (MHFName.equals("special"))
+		{
+			int type = 0;
+
+			if (entity.getType() == EntityType.ZOMBIE || entity.getType() == EntityType.GIANT)
+			{
+				type = 2;
+			}
+			else if (entity.getType() == EntityType.CREEPER)
+			{
+				type = 4;
+			}
+
+			head = new ItemStack(Material.SKULL_ITEM, 1, (byte)type);
+
+			SkullMeta meta = (SkullMeta)head.getItemMeta();
+			meta.setDisplayName(humanize2(entity.getType().toString().toLowerCase() + " Head"));
+			head.setItemMeta(meta);
+		}
+		else
+		{
+			head = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
+
+			SkullMeta meta = (SkullMeta)head.getItemMeta();
+			meta.setOwner(MHFName);
+			meta.setDisplayName(humanize2(entity.getType().toString().toLowerCase() + " Head"));
+			head.setItemMeta(meta);
+		}
+
 
 		event.getDrops().add(head);
 	}
 
+	@EventHandler
+	public void onLightningStrike(LightningStrikeEvent event)
+	{
+		Location location = event.getLightning().getLocation();
+
+		ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
+
+		SkullMeta meta = (SkullMeta)head.getItemMeta();
+		meta.setOwner(getMHFNameForEntity(event.getLightning()));
+		meta.setDisplayName("Herobrine Head");
+		head.setItemMeta(meta);
+
+		Random random = new Random();
+
+		location.getWorld().dropItemNaturally(location.add(random.nextInt(10) - 7, 50, 0), head);
+	}
+
     /******************************************
-     Event Handler: First Join Events
+          Event Handler: First Join Events
      --------------- Core Event ----------------
      *****************************************/
 
@@ -421,6 +478,34 @@ public class TweaksListener implements Listener {
 
     } // End of getFriendlyDate function
 
+	/**
+	 * Returns the given underscored_word_group as a Human Readable Word Group.
+	 * (Underscores are replaced by spaces and capitalized following words.)
+	 *
+	 * @param pWord
+	 *            String to be made more readable
+	 * @return Human-readable string
+	 */
+	public static String humanize2(String pWord)
+	{
+		StringBuilder sb = new StringBuilder();
+		String[] words = pWord.replaceAll("_", " ").split("\\s");
+		for (int i = 0; i < words.length; i++)
+		{
+			if (i > 0)
+				sb.append(" ");
+			if (words[i].length() > 0)
+			{
+				sb.append(Character.toUpperCase(words[i].charAt(0)));
+				if (words[i].length() > 1)
+				{
+					sb.append(words[i].substring(1));
+				}
+			}
+		}
+		return sb.toString();
+	}
+
 	private static String getMHFNameForEntity(Entity entity)
 	{
 
@@ -448,6 +533,7 @@ MHF_Spider
 MHF_Squid
 MHF_Villager
 MHF_Wither
+
 Blocks:
 MHF_Cactus
 MHF_Cake
@@ -475,12 +561,13 @@ MHF_Question
 	private static HashMap <EntityType, String> MHFNames()
 	{
 		HashMap <EntityType, String> entityNames = new HashMap<EntityType, String>();
-//		entityNames.put(EntityType.BAT, "");
-//		entityNames.put(EntityType.CREEPER, "");
-//		entityNames.put(EntityType.ENDER_DRAGON, "");
-//		entityNames.put(EntityType.GIANT, "");
-//		entityNames.put(EntityType.HORSE, "");
-//		entityNames.put(EntityType.SILVERFISH, "");
+
+		entityNames.put(EntityType.CREEPER, "special");
+		entityNames.put(EntityType.GIANT, "special");
+		entityNames.put(EntityType.ZOMBIE, "special");
+		entityNames.put(EntityType.SKELETON, "special");
+
+		entityNames.put(EntityType.LIGHTNING, "MHF_Herobrine");
 
 		entityNames.put(EntityType.BLAZE, "MHF_Blaze");
 		entityNames.put(EntityType.CAVE_SPIDER, "MHF_CaveSpider");
