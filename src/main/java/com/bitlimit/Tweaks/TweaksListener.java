@@ -222,7 +222,13 @@ public class TweaksListener implements Listener {
 			}
 		}
 
-		if (!MHFNames().containsKey(entity.getType()) || getRandomBoolean(0.99F))
+		float probability = 0.99F;
+		if (entity.getType() == EntityType.GHAST)
+		{
+			probability = 0.6F;
+		}
+
+		if (!MHFNames().containsKey(entity.getType()) || getRandomBoolean(probability))
 		{
 			 return;
 		}
