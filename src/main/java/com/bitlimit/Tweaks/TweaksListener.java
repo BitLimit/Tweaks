@@ -189,8 +189,7 @@ public class TweaksListener implements Listener {
 
 		    if (block.getType() == Material.CAKE_BLOCK)
 		    {
-			    probability = 0.07F;
-			    Bukkit.broadcastMessage("chance");
+			    probability = 0.09F;
 		    }
 		    else if (block.getType() == Material.MELON_BLOCK || block.getType() == Material.PUMPKIN)
 		    {
@@ -216,7 +215,7 @@ public class TweaksListener implements Listener {
     }
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void PistonExtendEvent(BlockPistonExtendEvent event)
+	public void onPistonExtendEvent(BlockPistonExtendEvent event)
 	{
 		Block movedBlock = event.getBlock();
 		Block pistonRelative = movedBlock.getRelative(event.getDirection());
@@ -241,10 +240,51 @@ public class TweaksListener implements Listener {
 		}
 	}
 
-		/******************************************
-				  Event Handler: Head Drops
-		 ----------- Core Event Listener -----------
-		 ******************************************/
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onBlockPhysicsEvent(BlockPhysicsEvent event)
+	{
+		if (event.getBlock().getType() == Material.CACTUS)
+		{
+			class DelayedCactusCheckTask implements Runnable
+			{
+				private final Block block;
+				DelayedCactusCheckTask(Block block)
+				{
+					this.block = block;
+				}
+
+				public void run()
+				{
+					if (this.block.getType() != Material.CACTUS)
+					{
+//						boolean shouldDrop = getRandomBoolean(0.005F);
+						boolean shouldDrop = getRandomBoolean(1F);
+						if (!shouldDrop)
+						{
+							return;
+						}
+
+						ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
+
+						SkullMeta meta = (SkullMeta)head.getItemMeta();
+						meta.setOwner((String)MHFBlocks().get(Material.CACTUS));
+						meta.setDisplayName(humanize2(block.getType().toString().toLowerCase()).replace("Tnt", "TNT"));
+						head.setItemMeta(meta);
+
+						Location location = block.getLocation();
+						location.getWorld().dropItemNaturally(location, head);
+					}
+				}
+			}
+
+			Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, , 1L);
+		}
+	}
+
+	/******************************************
+			  Event Handler: Head Drops
+	 ----------- Core Event Listener -----------
+	 ******************************************/
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
