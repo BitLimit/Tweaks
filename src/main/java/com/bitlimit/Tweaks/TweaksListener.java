@@ -3,6 +3,7 @@ package com.bitlimit.Tweaks;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.weather.LightningStrikeEvent;
@@ -179,7 +180,6 @@ public class TweaksListener implements Listener {
 
     }
 
-
     /******************************************
               Event Handler: Head Drops
      ----------- Core Event Listener -----------
@@ -212,7 +212,6 @@ public class TweaksListener implements Listener {
 	public void onEntityDeathEvent(EntityDeathEvent event)
 	{
 		Entity entity = event.getEntity();
-
 		if (entity instanceof Skeleton)
 		{
 			Skeleton skeleton = (Skeleton)entity;
@@ -284,6 +283,56 @@ public class TweaksListener implements Listener {
 		Random random = new Random();
 
 		location.getWorld().dropItemNaturally(location.add(random.nextInt(10) - 7, 50, 0), head);
+	}
+
+	@EventHandler
+	public void onChatEvent(AsyncPlayerChatEvent event)
+	{
+		boolean shouldDropItem = getRandomBoolean(0F);
+
+//		if (!shouldDropItem)
+//		{
+//			return;
+//		}
+
+		class ChatHandlerTask implements Runnable
+		{
+			private final AsyncPlayerChatEvent event;
+
+			ChatHandlerTask(AsyncPlayerChatEvent event)
+			{
+				this.event = event;
+			}
+
+			public void run()
+			{
+				Player player = this.event.getPlayer();
+				if (player == null)
+				{
+					return;
+				}
+
+				Location location = player.getLocation();
+				if (location == null)
+				{
+					return;
+				}
+
+				ArrayList<String> bonuses = MHFBonuses();
+				String bonus = bonuses.get(new Random().nextInt(bonuses.size()));
+
+				ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
+
+				SkullMeta meta = (SkullMeta)head.getItemMeta();
+				meta.setOwner(bonus);
+				meta.setDisplayName(humanize2(bonus.replace("MHF_", "").replace("Arrow", "Arrow ") + " Head"));
+				head.setItemMeta(meta);
+
+				location.getWorld().dropItemNaturally(location.add(0, 2, 0), head);
+			}
+		}
+
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, new ChatHandlerTask(event));
 	}
 
     /******************************************
@@ -595,6 +644,19 @@ MHF_Question
 		entityNames.put(EntityType.WITHER, "MHF_Wither");
 
 		return entityNames;
+	}
+
+	private static ArrayList<String> MHFBonuses()
+	{
+		ArrayList bonuses = new ArrayList<String>();
+		bonuses.add("MHF_ArrowUp");
+		bonuses.add("MHF_ArrowDown");
+		bonuses.add("MHF_ArrowLeft");
+		bonuses.add("MHF_ArrowRight");
+		bonuses.add("MHF_Exclamation");
+		bonuses.add("MHF_Question");
+
+		return bonuses;
 	}
 }
 
