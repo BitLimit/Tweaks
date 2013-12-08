@@ -74,7 +74,7 @@ public class TweaksListener implements Listener {
      ----------- Core Event Listener -----------
      ******************************************/
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
         // Event reference
         // BlockPlaceEvent(Block placedBlock, BlockState replacedBlockState, Block placedAgainst, ItemStack itemInHand, Player thePlayer, boolean canBuild) 
@@ -125,31 +125,37 @@ public class TweaksListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onPlayerInteractEvent(PlayerInteractEvent event) {
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPlayerInteractEvent(PlayerInteractEvent event) {
 
         Block block = event.getClickedBlock();
         if (block == null)
             return;
 
-        if (!block.hasMetadata("com.bitlimit.Tweaks.display"))
-            return;
+		Player player = event.getPlayer();
 
-        List<MetadataValue> metadataValueList = event.getClickedBlock().getMetadata("com.bitlimit.Tweaks.display");
+		if (block.hasMetadata("com.bitlimit.Tweaks.display"))
+        {
+			List<MetadataValue> metadataValueList = event.getClickedBlock().getMetadata("com.bitlimit.Tweaks.display");
 
-        if (metadataValueList.size() > 0) {
-            Player player = event.getPlayer();
-
-            for (MetadataValue metadataValue : metadataValueList) {
-                String metaString = metadataValue.asString();
-                player.sendMessage(metaString);
-            }
+            if (metadataValueList.size() > 0) {
+                for (MetadataValue metadataValue : metadataValueList) {
+                    String metaString = metadataValue.asString();
+                    player.sendMessage(metaString);
+               }
+          }
         }
+
+	    if (block.getType() == Material.CAKE_BLOCK && player.getFoodLevel() < 20)
+	    {
+			this.onBlockBreakEvent(new BlockBreakEvent(block, player));
+	    }
     }
 
-    @EventHandler
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockBreakEvent(BlockBreakEvent event) {
         Block block = event.getBlock();
+
         if (block.hasMetadata("com.bitlimit.Tweaks.display"))
             block.removeMetadata("com.bitlimit.Tweaks.display", this.plugin);
 
@@ -179,8 +185,20 @@ public class TweaksListener implements Listener {
 
 	    if (MHFBlocks().containsKey(block.getType()))
 	    {
-		    boolean shouldSkipDrop = getRandomBoolean(0.99F);
-		    if (shouldSkipDrop)
+		    float probability = 0.01F;
+
+		    if (block.getType() == Material.CAKE_BLOCK)
+		    {
+			    probability = 0.07F;
+			    Bukkit.broadcastMessage("chance");
+		    }
+		    else if (block.getType() == Material.MELON_BLOCK || block.getType() == Material.PUMPKIN)
+		    {
+			    probability = 0.005F;
+		    }
+
+		    boolean shouldDrop = getRandomBoolean(probability);
+		    if (!shouldDrop)
 		    {
 			    return;
 		    }
@@ -197,12 +215,38 @@ public class TweaksListener implements Listener {
 	    }
     }
 
-    /******************************************
-              Event Handler: Head Drops
-     ----------- Core Event Listener -----------
-     ******************************************/
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void PistonExtendEvent(BlockPistonExtendEvent event)
+	{
+		Block movedBlock = event.getBlock();
+		Block pistonRelative = movedBlock.getRelative(event.getDirection());
 
-    @EventHandler
+		if (MHFFarmableBlock().contains(pistonRelative.getType()))
+		{
+			this.onBlockBreakEvent(new BlockBreakEvent(pistonRelative, null));
+
+			return;
+		}
+
+		for (Block block : event.getBlocks())
+		{
+			Block relative = block.getRelative(event.getDirection());
+
+			if (MHFFarmableBlock().contains(relative.getType()))
+			{
+				this.onBlockBreakEvent(new BlockBreakEvent(relative, null));
+
+				return;
+			}
+		}
+	}
+
+		/******************************************
+				  Event Handler: Head Drops
+		 ----------- Core Event Listener -----------
+		 ******************************************/
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (event.getEntity().getKiller() == null)
             return;
@@ -225,7 +269,7 @@ public class TweaksListener implements Listener {
         }
     }
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityDeathEvent(EntityDeathEvent event)
 	{
 		Entity entity = event.getEntity();
@@ -242,6 +286,10 @@ public class TweaksListener implements Listener {
 		if (entity.getType() == EntityType.GHAST)
 		{
 			probability = 0.6F;
+		}
+		else if (entity.getType() == EntityType.CREEPER)
+		{
+			probability = 0.85F;
 		}
 
 		if (!MHFNames().containsKey(entity.getType()) || getRandomBoolean(probability))
@@ -281,11 +329,10 @@ public class TweaksListener implements Listener {
 			head.setItemMeta(meta);
 		}
 
-
 		event.getDrops().add(head);
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onLightningStrike(LightningStrikeEvent event)
 	{
 		Location location = event.getLightning().getLocation();
@@ -302,7 +349,7 @@ public class TweaksListener implements Listener {
 		location.getWorld().dropItemNaturally(location.add(random.nextInt(10) - 7, 50, 0), head);
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onChatEvent(AsyncPlayerChatEvent event)
 	{
 		boolean shouldNotDropItem = getRandomBoolean(0.97F);
@@ -357,7 +404,7 @@ public class TweaksListener implements Listener {
      --------------- Core Event ----------------
      *****************************************/
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerJoinEvent(PlayerJoinEvent event) {
         if (!event.getPlayer().hasPlayedBefore()) {
             if (!this.plugin.getConfig().getConfigurationSection("preferences").getBoolean("spawnItems"))
@@ -410,7 +457,7 @@ public class TweaksListener implements Listener {
     {
         Random random = new Random();
 
-        return random.nextInt(100) < (probability * 100);
+        return (random.nextInt(100) < (probability * 100));
     }
 
     private void displaySmokeInWorldAtLocation(World world, Location location) {
@@ -659,6 +706,15 @@ public class TweaksListener implements Listener {
 		blockNames.put(Material.TNT, TNTNames);
 
 		return blockNames;
+	}
+
+	private static ArrayList<Material> MHFFarmableBlock()
+	{
+		ArrayList farmables = new ArrayList<Material>();
+		farmables.add(Material.PUMPKIN);
+		farmables.add(Material.MELON_BLOCK);
+
+		return farmables;
 	}
 }
 
