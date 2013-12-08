@@ -178,7 +178,7 @@ public class TweaksListener implements Listener {
 
 
     /******************************************
-     Event Handler: Player Head Kill-Drops
+            Event Handler: Head Kill-Drops
      ----------- Core Event Listener -----------
      ******************************************/
 
@@ -204,6 +204,24 @@ public class TweaksListener implements Listener {
             event.getDrops().add(skullStack);
         }
     }
+
+	@EventHandler
+	public void onEntityDeathEvent(EntityDeathEvent event)
+	{
+		Entity entity = event.getEntity();
+
+		if (!MHFNames().containsKey(entity.getType()) /* || getRandomBoolean(0.99F) */)
+		{
+			 return;
+		}
+
+		ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
+
+		SkullMeta meta = (SkullMeta)head.getItemMeta();
+		meta.setOwner(getMHFNameForEntity(entity));
+
+		event.getDrops().add(head);
+	}
 
     /******************************************
      Event Handler: First Join Events
@@ -263,7 +281,7 @@ public class TweaksListener implements Listener {
     {
         Random random = new Random();
 
-        return random.nextInt(10) < (probability * 10);
+        return random.nextInt(100) < (probability * 100);
     }
 
     private void displaySmokeInWorldAtLocation(World world, Location location) {
@@ -402,5 +420,88 @@ public class TweaksListener implements Listener {
         return friendly;
 
     } // End of getFriendlyDate function
+
+	private static String getMHFNameForEntity(Entity entity)
+	{
+
+		/*
+
+Mobs:
+MHF_Blaze
+MHF_CaveSpider
+MHF_Chicken
+MHF_Cow
+MHF_Enderman
+MHF_Ghast
+MHF_Golem
+
+MHF_Herobrine
+
+MHF_LavaSlime
+MHF_MushroomCow
+MHF_Ocelot
+MHF_Pig
+MHF_PigZombie
+MHF_Sheep
+MHF_Slime
+MHF_Spider
+MHF_Squid
+MHF_Villager
+MHF_Wither
+Blocks:
+MHF_Cactus
+MHF_Cake
+MHF_Chest
+MHF_Melon
+MHF_OakLog
+MHF_Pumpkin
+MHF_TNT
+MHF_TNT2
+Bonus:
+MHF_ArrowUp
+MHF_ArrowDown
+MHF_ArrowLeft
+MHF_ArrowRight
+MHF_Exclamation
+MHF_Question
+
+		 */
+
+
+
+		return MHFNames().get(entity.getType());
+	}
+
+	private static HashMap <EntityType, String> MHFNames()
+	{
+		HashMap <EntityType, String> entityNames = new HashMap<EntityType, String>();
+//		entityNames.put(EntityType.BAT, "");
+//		entityNames.put(EntityType.CREEPER, "");
+//		entityNames.put(EntityType.ENDER_DRAGON, "");
+//		entityNames.put(EntityType.GIANT, "");
+//		entityNames.put(EntityType.HORSE, "");
+//		entityNames.put(EntityType.SILVERFISH, "");
+
+		entityNames.put(EntityType.BLAZE, "MHF_Blaze");
+		entityNames.put(EntityType.CAVE_SPIDER, "MHF_CaveSpider");
+		entityNames.put(EntityType.CHICKEN, "MHF_Chicken");
+		entityNames.put(EntityType.COW, "MHF_Cow");
+		entityNames.put(EntityType.ENDERMAN, "MHF_Enderman");
+		entityNames.put(EntityType.GHAST, "MHF_Ghast");
+		entityNames.put(EntityType.IRON_GOLEM, "MHF_Golem");
+		entityNames.put(EntityType.MAGMA_CUBE, "MHF_LavaSlime");
+		entityNames.put(EntityType.MUSHROOM_COW, "MHF_MushroomCow");
+		entityNames.put(EntityType.OCELOT, "MHF_Ocelot");
+		entityNames.put(EntityType.PIG, "MHF_Pig");
+		entityNames.put(EntityType.PIG_ZOMBIE, "MHF_PigZombie");
+		entityNames.put(EntityType.SHEEP, "MHF_Sheep");
+		entityNames.put(EntityType.SLIME, "MHF_Slime");
+		entityNames.put(EntityType.SPIDER, "MHF_Spider");
+		entityNames.put(EntityType.SQUID, "MHF_Squid");
+		entityNames.put(EntityType.VILLAGER, "MHF_Villager");
+		entityNames.put(EntityType.WITHER, "MHF_Wither");
+
+		return entityNames;
+	}
 }
 
