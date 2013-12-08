@@ -177,7 +177,24 @@ public class TweaksListener implements Listener {
             block.removeMetadata("com.bitlimit.Tweaks.lore", this.plugin);
         }
 
+	    if (MHFBlocks().containsKey(block.getType()))
+	    {
+		    boolean shouldSkipDrop = getRandomBoolean(0.99F);
+		    if (shouldSkipDrop)
+		    {
+			    return;
+		    }
 
+		    ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
+
+		    SkullMeta meta = (SkullMeta)head.getItemMeta();
+		    meta.setOwner(getMHFNameForBlock(block));
+		    meta.setDisplayName(humanize2(block.getType().toString().toLowerCase()).replace("Tnt", "TNT"));
+		    head.setItemMeta(meta);
+
+		    Location location = block.getLocation();
+		    location.getWorld().dropItemNaturally(location, head);
+	    }
     }
 
     /******************************************
@@ -197,7 +214,7 @@ public class TweaksListener implements Listener {
             meta.setOwner(event.getEntity().getDisplayName());
 
             Player killer = event.getEntity().getKiller();
-            if (killer.getItemInHand().containsEnchantment(Enchantment.SILK_TOUCH)) {
+            if (killer.getItemInHand().containsEnchantment(Enchantment.DAMAGE_ARTHROPODS)) {
                 ArrayList lore = new ArrayList();
                 lore.add(ChatColor.AQUA + "Slain by " + ChatColor.GOLD + event.getEntity().getKiller().getDisplayName() + ChatColor.AQUA + " on " + getFriendlyDate(Calendar.getInstance()));
                 meta.setLore(lore);
@@ -288,12 +305,12 @@ public class TweaksListener implements Listener {
 	@EventHandler
 	public void onChatEvent(AsyncPlayerChatEvent event)
 	{
-		boolean shouldDropItem = getRandomBoolean(0F);
+		boolean shouldNotDropItem = getRandomBoolean(0.97F);
 
-//		if (!shouldDropItem)
-//		{
-//			return;
-//		}
+		if (shouldNotDropItem)
+		{
+			return;
+		}
 
 		class ChatHandlerTask implements Runnable
 		{
@@ -563,53 +580,6 @@ public class TweaksListener implements Listener {
 
 	private static String getMHFNameForEntity(Entity entity)
 	{
-
-		/*
-
-Mobs:
-MHF_Blaze
-MHF_CaveSpider
-MHF_Chicken
-MHF_Cow
-MHF_Enderman
-MHF_Ghast
-MHF_Golem
-
-MHF_Herobrine
-
-MHF_LavaSlime
-MHF_MushroomCow
-MHF_Ocelot
-MHF_Pig
-MHF_PigZombie
-MHF_Sheep
-MHF_Slime
-MHF_Spider
-MHF_Squid
-MHF_Villager
-MHF_Wither
-
-Blocks:
-MHF_Cactus
-MHF_Cake
-MHF_Chest
-MHF_Melon
-MHF_OakLog
-MHF_Pumpkin
-MHF_TNT
-MHF_TNT2
-Bonus:
-MHF_ArrowUp
-MHF_ArrowDown
-MHF_ArrowLeft
-MHF_ArrowRight
-MHF_Exclamation
-MHF_Question
-
-		 */
-
-
-
 		return MHFNames().get(entity.getType());
 	}
 
@@ -657,6 +627,38 @@ MHF_Question
 		bonuses.add("MHF_Question");
 
 		return bonuses;
+	}
+
+	private static String getMHFNameForBlock(Block block)
+	{
+		Object unknown = MHFBlocks().get(block.getType());
+
+		if (unknown instanceof String)
+		{
+			return (String)unknown;
+		}
+		else
+		{
+			String[] names = (String[])unknown;
+			return names[new Random().nextInt(names.length)];
+		}
+	}
+
+	private static HashMap <Material, Object> MHFBlocks()
+	{
+		HashMap <Material, Object> blockNames = new HashMap<Material, Object>();
+
+		blockNames.put(Material.CACTUS, "MHF_Cactus");
+		blockNames.put(Material.CAKE_BLOCK, "MHF_Cake");
+		blockNames.put(Material.CHEST, "MHF_Chest");
+		blockNames.put(Material.MELON_BLOCK, "MHF_Melon");
+		blockNames.put(Material.LOG, "MHF_OakLog");
+		blockNames.put(Material.PUMPKIN, "MHF_Pumpkin");
+
+		String[] TNTNames = {"MHF_TNT", "MHF_TNT2"};
+		blockNames.put(Material.TNT, TNTNames);
+
+		return blockNames;
 	}
 }
 
