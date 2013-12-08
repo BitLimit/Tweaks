@@ -7,7 +7,7 @@
 
   <groupId>com.bitlimit.Tweaks</groupId>
   <artifactId>Tweaks</artifactId>
-  <version>1.5.0</version>
+  <version>1.6.0</version>
   <name>Tweaks</name>
   <description>Code level tweaks for BitLimit Private Survival.</description>
 
@@ -31,7 +31,7 @@
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
       <!-- Bukkit API Version, change if out dated -->
-      <version>1.6.2-R1.0</version>
+      <version>1.7.2-R1.0</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
