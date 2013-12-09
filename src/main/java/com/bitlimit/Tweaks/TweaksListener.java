@@ -326,7 +326,7 @@ public class TweaksListener implements Listener {
 		{
 			if (this.block.getType() == Material.AIR)
 			{
-				boolean shouldDrop = getRandomBoolean(1F);
+				boolean shouldDrop = getRandomBoolean(0.005F);
 				if (!shouldDrop)
 				{
 					return;
