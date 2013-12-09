@@ -101,27 +101,30 @@ public class TweaksListener implements Listener {
             }
         }
 
-        if (event.getItemInHand().getType() == Material.SKULL_ITEM || event.getItemInHand().getType() == Material.SKULL) {
-            if (event.getItemInHand().getItemMeta().getLore() == null)
-                return;
-
-            if (event.getItemInHand().getItemMeta().getLore().size() == 0)
-                return;
-
+        if (event.getItemInHand().getType() == Material.SKULL_ITEM || event.getItemInHand().getType() == Material.SKULL)
+        {
             SkullMeta skullMeta = (SkullMeta)event.getItemInHand().getItemMeta();
+            List<String> lore = skullMeta.getLore();
 
-            List<String> meta = event.getItemInHand().getItemMeta().getLore();
-            StringBuilder builder = new StringBuilder();
-            for (String value : meta) {
-                builder.append(value);
-            }
+	        if (lore != null)
+	        {
+                StringBuilder builder = new StringBuilder();
+                for (String value : lore)
+                {
+                    builder.append(value);
+                }
 
-            String builtString = builder.toString();
-            String strippedString = ChatColor.stripColor(builtString);
-            builtString = builtString.replaceFirst(strippedString.substring(0, 1), strippedString.substring(0, 1).toLowerCase());
+                String builtString = builder.toString();
+                String strippedString = ChatColor.stripColor(builtString);
+                builtString = builtString.replaceFirst(strippedString.substring(0, 1), strippedString.substring(0, 1).toLowerCase());
+	            event.getBlockPlaced().setMetadata("com.bitlimit.Tweaks.lore", new FixedMetadataValue(this.plugin, skullMeta.getLore()));
+		        event.getBlockPlaced().setMetadata("com.bitlimit.Tweaks.display", new FixedMetadataValue(this.plugin, ChatColor.YELLOW + skullMeta.getOwner() + ChatColor.AQUA + " was " + builtString));
+	        }
+	        else
+	        {
+		        event.getBlockPlaced().setMetadata("com.bitlimit.Tweaks.name", new FixedMetadataValue(this.plugin, skullMeta.getDisplayName()));
+	        }
 
-            event.getBlockPlaced().setMetadata("com.bitlimit.Tweaks.display", new FixedMetadataValue(this.plugin, ChatColor.YELLOW + skullMeta.getOwner() + ChatColor.AQUA + " was " + builtString));
-            event.getBlockPlaced().setMetadata("com.bitlimit.Tweaks.lore", new FixedMetadataValue(this.plugin, skullMeta.getLore()));
         }
     }
 
@@ -157,8 +160,29 @@ public class TweaksListener implements Listener {
         Block block = event.getBlock();
 
         if (block.hasMetadata("com.bitlimit.Tweaks.display"))
-            block.removeMetadata("com.bitlimit.Tweaks.display", this.plugin);
+        {
+	        block.removeMetadata("com.bitlimit.Tweaks.display", this.plugin);
+        }
+		else if (block.hasMetadata("com.bitlimit.Tweaks.name"))
+        {
+	        List<MetadataValue> metadataValueList = block.getMetadata("com.bitlimit.Tweaks.name");
+	        String displayName = (String)metadataValueList.get(0).value();
 
+	        ItemStack itemStack = (ItemStack)block.getDrops().iterator().next();
+            ItemMeta itemMeta = itemStack.getItemMeta();
+	        itemMeta.setDisplayName(displayName);
+	        itemStack.setItemMeta(itemMeta);
+
+
+	        block.getLocation().getWorld().dropItemNaturally(block.getLocation(), itemStack);
+
+	        event.setCancelled(true);
+	        block.setType(Material.AIR);
+
+	        block.removeMetadata("com.bitlimit.Tweaks.name", this.plugin);
+
+	        return;
+        }
 
         if (block.hasMetadata("com.bitlimit.Tweaks.lore")) {
             List<MetadataValue> metadataValueList = block.getMetadata("com.bitlimit.Tweaks.lore");
@@ -196,6 +220,21 @@ public class TweaksListener implements Listener {
 			    probability = 0.005F;
 		    }
 
+		    if (event.getPlayer() != null)
+		    {
+			    Player player = event.getPlayer();
+			    if (player.getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_BLOCKS))
+			    {
+				    float enchantmentLevel = player.getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+				    Bukkit.broadcastMessage(Float.toString(enchantmentLevel));
+
+				    enchantmentLevel += 1F;
+				    enchantmentLevel *= 0.75F;
+
+				    probability *= enchantmentLevel;
+			    }
+		    }
+
 		    boolean shouldDrop = getRandomBoolean(probability);
 		    if (!shouldDrop)
 		    {
@@ -205,12 +244,30 @@ public class TweaksListener implements Listener {
 		    ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
 
 		    SkullMeta meta = (SkullMeta)head.getItemMeta();
-		    meta.setOwner(getMHFNameForBlock(block));
+		    meta.setOwner(getMHFNameForBlockType(block.getType()));
 		    meta.setDisplayName(humanize2(block.getType().toString().toLowerCase()).replace("Tnt", "TNT"));
 		    head.setItemMeta(meta);
 
-		    Location location = block.getLocation();
-		    location.getWorld().dropItemNaturally(location, head);
+		    class DelayedLocationTask implements Runnable
+		    {
+			    private final ItemStack head;
+			    private final Location location;
+
+
+			    DelayedLocationTask(ItemStack head, Location location)
+			    {
+				    this.head = head;
+				    this.location = location;
+			    }
+
+			    public void run()
+			    {
+				    location.getWorld().dropItemNaturally(location, head);
+			    }
+		    }
+
+		    Location location = block.getLocation().add(0, 2, 0);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, new DelayedLocationTask(head, location), 10L);
 	    }
     }
 
@@ -257,8 +314,7 @@ public class TweaksListener implements Listener {
 				{
 					if (this.block.getType() != Material.CACTUS)
 					{
-//						boolean shouldDrop = getRandomBoolean(0.005F);
-						boolean shouldDrop = getRandomBoolean(1F);
+						boolean shouldDrop = getRandomBoolean(0.005F);
 						if (!shouldDrop)
 						{
 							return;
@@ -268,16 +324,18 @@ public class TweaksListener implements Listener {
 
 						SkullMeta meta = (SkullMeta)head.getItemMeta();
 						meta.setOwner((String)MHFBlocks().get(Material.CACTUS));
-						meta.setDisplayName(humanize2(block.getType().toString().toLowerCase()).replace("Tnt", "TNT"));
+						meta.setDisplayName(humanize2(Material.CACTUS.toString().toLowerCase()).replace("Tnt", "TNT"));
 						head.setItemMeta(meta);
 
 						Location location = block.getLocation();
-						location.getWorld().dropItemNaturally(location, head);
+
+						Item item = location.getWorld().dropItem(location, head);
+						item.setVelocity(new org.bukkit.util.Vector(0.2, 0.2, 0.2));
 					}
 				}
 			}
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, , 1L);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, new DelayedCactusCheckTask(event.getBlock()), 1L);
 		}
 	}
 
@@ -312,7 +370,7 @@ public class TweaksListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityDeathEvent(EntityDeathEvent event)
 	{
-		Entity entity = event.getEntity();
+		LivingEntity entity = event.getEntity();
 		if (entity instanceof Skeleton)
 		{
 			Skeleton skeleton = (Skeleton)entity;
@@ -322,17 +380,43 @@ public class TweaksListener implements Listener {
 			}
 		}
 
-		float probability = 0.99F;
-		if (entity.getType() == EntityType.GHAST)
+		float probability = 0.01F;
+		EntityType entityType = entity.getType();
+
+		if (entityType == EntityType.GHAST)
 		{
-			probability = 0.6F;
+			probability = 0.4F;
 		}
-		else if (entity.getType() == EntityType.CREEPER)
+		else if (entityType == EntityType.CREEPER)
 		{
-			probability = 0.85F;
+			probability = 0.18F;
+		}
+		else if (entityType == EntityType.SQUID || entityType == EntityType.SLIME)
+		{
+			probability = 0.08F;
+		}
+		else if (entityType == EntityType.WITHER)
+		{
+			probability = 1F;
 		}
 
-		if (!MHFNames().containsKey(entity.getType()) || getRandomBoolean(probability))
+		if (entity.getKiller() != null)
+		{
+			Player player = entity.getKiller();
+			if (player.getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
+			{
+				float enchantmentLevel = player.getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+				Bukkit.broadcastMessage(Float.toString(enchantmentLevel));
+
+				enchantmentLevel += 1F;
+				enchantmentLevel *= 0.75F;
+
+				probability *= enchantmentLevel;
+			}
+		}
+
+		boolean shouldDrop = getRandomBoolean(probability);
+		if (!MHFNames().containsKey(entity.getType()) || !shouldDrop)
 		{
 			 return;
 		}
@@ -437,6 +521,32 @@ public class TweaksListener implements Listener {
 		}
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, new ChatHandlerTask(event));
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onExplosionEvent(EntityExplodeEvent event)
+	{
+		if (event.getEntity() instanceof TNTPrimed)
+		{
+			TNTPrimed entityTNT = (TNTPrimed)event.getEntity();
+
+
+			boolean shouldDrop = getRandomBoolean(0.25F);
+			if (!shouldDrop)
+			{
+				return;
+			}
+
+			ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
+
+			SkullMeta meta = (SkullMeta)head.getItemMeta();
+			meta.setOwner(getMHFNameForBlockType(Material.TNT));
+			meta.setDisplayName("TNT");
+			head.setItemMeta(meta);
+
+			Location location = entityTNT.getLocation();
+			Item item = location.getWorld().dropItemNaturally(location.add(0, 0, 0), head);
+		}
 	}
 
     /******************************************
@@ -716,9 +826,9 @@ public class TweaksListener implements Listener {
 		return bonuses;
 	}
 
-	private static String getMHFNameForBlock(Block block)
+	private static String getMHFNameForBlockType(Material type)
 	{
-		Object unknown = MHFBlocks().get(block.getType());
+		Object unknown = MHFBlocks().get(type);
 
 		if (unknown instanceof String)
 		{
