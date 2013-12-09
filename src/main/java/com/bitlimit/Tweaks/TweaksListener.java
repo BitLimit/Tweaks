@@ -301,40 +301,49 @@ public class TweaksListener implements Listener {
 	{
 		if (event.getBlock().getType() == Material.CACTUS)
 		{
-			class DelayedCactusCheckTask implements Runnable
-			{
-				private final Block block;
-				DelayedCactusCheckTask(Block block)
-				{
-					this.block = block;
-				}
-
-				public void run()
-				{
-					if (this.block.getType() != Material.CACTUS)
-					{
-						boolean shouldDrop = getRandomBoolean(0.005F);
-						if (!shouldDrop)
-						{
-							return;
-						}
-
-						ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
-
-						SkullMeta meta = (SkullMeta)head.getItemMeta();
-						meta.setOwner((String)MHFBlocks().get(Material.CACTUS));
-						meta.setDisplayName(humanize2(Material.CACTUS.toString().toLowerCase()).replace("Tnt", "TNT"));
-						head.setItemMeta(meta);
-
-						Location location = block.getLocation();
-
-						Item item = location.getWorld().dropItem(location, head);
-						item.setVelocity(new org.bukkit.util.Vector(0.2, 0.2, 0.2));
-					}
-				}
-			}
-
 			Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, new DelayedCactusCheckTask(event.getBlock()), 1L);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onBlockGrowEvent(BlockGrowEvent event)
+	{
+		if (event.getNewState().getType() == Material.CACTUS)
+		{
+			Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, new DelayedCactusCheckTask(event.getBlock()), 1L);
+		}
+	}
+
+	class DelayedCactusCheckTask implements Runnable
+	{
+		private final Block block;
+		DelayedCactusCheckTask(Block block)
+		{
+			this.block = block;
+		}
+
+		public void run()
+		{
+			if (this.block.getType() == Material.AIR)
+			{
+				boolean shouldDrop = getRandomBoolean(1F);
+				if (!shouldDrop)
+				{
+					return;
+				}
+
+				ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (byte)3);
+
+				SkullMeta meta = (SkullMeta)head.getItemMeta();
+				meta.setOwner((String)MHFBlocks().get(Material.CACTUS));
+				meta.setDisplayName(humanize2(Material.CACTUS.toString().toLowerCase()).replace("Tnt", "TNT"));
+				head.setItemMeta(meta);
+
+				Location location = block.getLocation();
+
+				Item item = location.getWorld().dropItemNaturally(location, head);
+				item.setVelocity(item.getVelocity().setY(0.2));
+			}
 		}
 	}
 
