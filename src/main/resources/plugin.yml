@@ -1,6 +1,6 @@
 main: com.bitlimit.Tweaks.Tweaks
 name: Tweaks
-version: 1.6.2
+version: 1.6.3
 author: Kolin Krewinkel & BitLimit Team
 description: Code-level runtime tweaks for BitLimit Private Survival.
 website: http://github.com/BitLimit/Tweaks/
