@@ -226,7 +226,6 @@ public class TweaksListener implements Listener {
 			    if (player.getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_BLOCKS))
 			    {
 				    float enchantmentLevel = player.getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
-				    Bukkit.broadcastMessage(Float.toString(enchantmentLevel));
 
 				    enchantmentLevel += 1F;
 				    enchantmentLevel *= 0.75F;
@@ -406,7 +405,6 @@ public class TweaksListener implements Listener {
 			if (player.getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
 			{
 				float enchantmentLevel = player.getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
-				Bukkit.broadcastMessage(Float.toString(enchantmentLevel));
 
 				enchantmentLevel += 1F;
 				enchantmentLevel *= 0.75F;
