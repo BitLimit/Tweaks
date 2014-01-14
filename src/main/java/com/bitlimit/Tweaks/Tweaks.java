@@ -63,8 +63,6 @@ public class Tweaks extends JavaPlugin {
 			                Double ratio = (Double)worldDefinition.get("reduction");
 			                int counterAmount = (int)(baseDuration * ratio);
 			                world.setWeatherDuration(weatherDuration + counterAmount);
-
-			                Bukkit.broadcastMessage("Reducing weather counter with ratio " + ratio + " in world " + world);
 		                }
 	                }
                 }
