@@ -1,5 +1,7 @@
 package com.bitlimit.Tweaks;
 
+import com.sk89q.worldedit.bukkit.BukkitBiomeType;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
@@ -38,7 +40,10 @@ public class Tweaks extends JavaPlugin {
     public void setRepeatingTaskEnabled(boolean enabled) {
         Server server = this.getServer();
         BukkitScheduler scheduler = server.getScheduler();
-        if (enabled && this.weatherId == 0) {
+	    final long baseDuration = 1200L;
+
+        if (enabled && this.weatherId == 0)
+        {
             class BitLimitRecurringTask implements Runnable {
                 Plugin plugin;
 
@@ -55,15 +60,17 @@ public class Tweaks extends JavaPlugin {
 		                if (!world.hasStorm())
 		                {
 			                int weatherDuration = world.getWeatherDuration();
-			                Float ratio = (Float)worldDefinition.get("reduction");
-			                int counterAmount = (int)(1200 * ratio);
+			                Double ratio = (Double)worldDefinition.get("reduction");
+			                int counterAmount = (int)(baseDuration * ratio);
 			                world.setWeatherDuration(weatherDuration + counterAmount);
+
+			                Bukkit.broadcastMessage("Reducing weather counter with ratio " + ratio + " in world " + world);
 		                }
 	                }
                 }
             }
 
-            this.weatherId = scheduler.scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), 1200L, 1200L);
+            this.weatherId = scheduler.scheduleSyncRepeatingTask(this, new BitLimitRecurringTask(this), baseDuration, baseDuration);
         } else if (this.weatherId != 0) {
             scheduler.cancelTask(this.weatherId);
             this.weatherId = 0;
