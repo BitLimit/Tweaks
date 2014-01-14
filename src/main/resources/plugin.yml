@@ -1,12 +1,12 @@
 main: com.bitlimit.Tweaks.Tweaks
 name: Tweaks
-version: 1.6.3
+version: 1.6.4
 author: Kolin Krewinkel & BitLimit Team
-description: Code-level runtime tweaks for BitLimit Private Survival.
+description: Gameplay tweaks for BitLimit Private Survival.
 website: http://github.com/BitLimit/Tweaks/
 commands:
     tweaks:
-        description: /tweaks  [tnt|slimes|weather] [state] to set the state or omit the state to return the current config status.
+        description: /tweaks  [tnt|slimes|weather|spawnItems] [state] to set the state or omit the state to return the current config status.
 permissions:
     tweaks.*:
         description: Gives all permissions of BitLimit Tweaks plugin toggling.
