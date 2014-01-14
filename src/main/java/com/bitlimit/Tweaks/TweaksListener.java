@@ -393,15 +393,15 @@ public class TweaksListener implements Listener {
 
 		if (entityType == EntityType.GHAST)
 		{
-			probability = 0.4F;
+			probability = 0.33F;
 		}
 		else if (entityType == EntityType.CREEPER)
 		{
-			probability = 0.18F;
+			probability = 0.05F;
 		}
 		else if (entityType == EntityType.SQUID || entityType == EntityType.SLIME)
 		{
-			probability = 0.08F;
+			probability = 0.06F;
 		}
 		else if (entityType == EntityType.WITHER)
 		{
@@ -413,10 +413,8 @@ public class TweaksListener implements Listener {
 			Player player = entity.getKiller();
 			if (player.getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
 			{
-				float enchantmentLevel = player.getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+				float enchantmentLevel = player.getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) + 1;
 
-				enchantmentLevel += 1F;
-				enchantmentLevel *= 0.75F;
 
 				probability *= enchantmentLevel;
 			}
