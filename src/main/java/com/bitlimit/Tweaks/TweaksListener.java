@@ -413,10 +413,9 @@ public class TweaksListener implements Listener {
 			Player player = entity.getKiller();
 			if (player.getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
 			{
-				float enchantmentLevel = player.getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) + 1;
+				float enchantmentLevel = player.getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 
-
-				probability *= enchantmentLevel;
+				probability += (enchantmentLevel *  0.005F);
 			}
 		}
 
@@ -612,7 +611,7 @@ public class TweaksListener implements Listener {
     {
         Random random = new Random();
 
-        return (random.nextInt(100) < (probability * 100));
+        return (random.nextInt(1000) < (probability * 1000));
     }
 
     private void displaySmokeInWorldAtLocation(World world, Location location) {
