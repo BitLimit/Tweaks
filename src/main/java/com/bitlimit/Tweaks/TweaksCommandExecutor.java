@@ -34,14 +34,11 @@ public class TweaksCommandExecutor implements CommandExecutor {
                     return false;
                 }
                 boolean newValue = parsedBooleanInput(args[1]);
-                ConfigurationSection configurationSection = config.getConfigurationSection("preferences");
+	            String modified = args[0].toLowerCase();
 
-                if (args[0].toLowerCase().equals("tnt")) {
-                    configurationSection.set("tnt", newValue);
-                } else if (args[0].toLowerCase().equals("weather")) {
-                    configurationSection.set("weather", newValue);
-                } else if (args[0].toLowerCase().equals("slimes")) {
-                    configurationSection.set("slimes", newValue);
+                if (modified.equals("tnt") || modified.equals("weather") || modified.equals("slimes"))
+                {
+                    config.getConfigurationSection(modified).set("enabled", newValue);
                 } else if (args[0].toLowerCase().equals("spawnitems")) {
 
                     if (args[1].toLowerCase().equals("location")) {
