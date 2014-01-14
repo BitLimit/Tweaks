@@ -4,11 +4,11 @@ tnt:
 weather:
     enabled: true
     worlds:
-            - name: world
-        reduction : 0.75            
+           - name: world
+        reduction: 0.75            
 
 slimes:
     enabled: true
 
-spawn_items:
+spawnItems:
     enabled: false
