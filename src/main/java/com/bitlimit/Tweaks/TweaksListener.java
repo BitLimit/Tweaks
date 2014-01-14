@@ -393,15 +393,15 @@ public class TweaksListener implements Listener {
 
 		if (entityType == EntityType.GHAST)
 		{
-			probability = 0.4F;
+			probability = 0.33F;
 		}
 		else if (entityType == EntityType.CREEPER)
 		{
-			probability = 0.18F;
+			probability = 0.05F;
 		}
 		else if (entityType == EntityType.SQUID || entityType == EntityType.SLIME)
 		{
-			probability = 0.08F;
+			probability = 0.06F;
 		}
 		else if (entityType == EntityType.WITHER)
 		{
@@ -415,10 +415,7 @@ public class TweaksListener implements Listener {
 			{
 				float enchantmentLevel = player.getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 
-				enchantmentLevel += 1F;
-				enchantmentLevel *= 0.75F;
-
-				probability *= enchantmentLevel;
+				probability += (enchantmentLevel *  0.005F);
 			}
 		}
 
@@ -614,7 +611,7 @@ public class TweaksListener implements Listener {
     {
         Random random = new Random();
 
-        return (random.nextInt(100) < (probability * 100));
+        return (random.nextInt(1000) < (probability * 1000));
     }
 
     private void displaySmokeInWorldAtLocation(World world, Location location) {
