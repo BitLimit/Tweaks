@@ -1,9 +1,15 @@
+tnt: 
+    enabled: true
 
-preferences:
-    tnt: true
-    weather: true
-    slimes: true
-    spawnItems: false
-meta:
-    weather:
-        world: world
+weather:
+    enabled: true
+    worlds:
+        -
+            name     : world
+            reduction: 0.75            
+
+slimes:
+    enabled: true
+
+spawnItems:
+    enabled: false

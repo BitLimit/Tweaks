@@ -56,7 +56,7 @@ public class TweaksListener implements Listener {
         // CreatureSpawnEvent (Entity spawnee, CreatureType type, Location loc, SpawnReason reason
 
         FileConfiguration config = this.plugin.getConfig();
-        if (!config.getConfigurationSection("preferences").getBoolean("slimes"))
+        if (!config.getConfigurationSection("slimes").getBoolean("enabled"))
             return;
 
         // Gather information to determine if these are the slimes we are looking for.
@@ -79,7 +79,7 @@ public class TweaksListener implements Listener {
         // Event reference
         // BlockPlaceEvent(Block placedBlock, BlockState replacedBlockState, Block placedAgainst, ItemStack itemInHand, Player thePlayer, boolean canBuild) 
 
-        boolean confinementEnabled = this.plugin.getConfig().getConfigurationSection("preferences").getBoolean("tnt");
+        boolean confinementEnabled = this.plugin.getConfig().getConfigurationSection("tnt").getBoolean("enabled");
 
         if (event.getItemInHand().getType() == Material.TNT && confinementEnabled) {
             WorldGuardPlugin worldGuard = getWorldGuard();
@@ -561,10 +561,10 @@ public class TweaksListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerJoinEvent(PlayerJoinEvent event) {
         if (!event.getPlayer().hasPlayedBefore()) {
-            if (!this.plugin.getConfig().getConfigurationSection("preferences").getBoolean("spawnItems"))
+            if (!this.plugin.getConfig().getConfigurationSection("spawnItems").getBoolean("enabled"))
                 return;
 
-            Location location = this.parseLocation(this.plugin.getConfig().getConfigurationSection("meta").getConfigurationSection("spawnItems").getConfigurationSection("location"));
+            Location location = this.parseLocation(this.plugin.getConfig().getConfigurationSection("spawnItems").getConfigurationSection("location"));
             Block block = location.getWorld().getBlockAt(location);
 
             if (block.getType() == Material.CHEST) {

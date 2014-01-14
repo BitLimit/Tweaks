@@ -34,22 +34,32 @@ public class TweaksCommandExecutor implements CommandExecutor {
                     return false;
                 }
                 boolean newValue = parsedBooleanInput(args[1]);
-                ConfigurationSection configurationSection = config.getConfigurationSection("preferences");
+	            String modified = args[0].toLowerCase();
 
-                if (args[0].toLowerCase().equals("tnt")) {
-                    configurationSection.set("tnt", newValue);
-                } else if (args[0].toLowerCase().equals("weather")) {
-                    configurationSection.set("weather", newValue);
-                } else if (args[0].toLowerCase().equals("slimes")) {
-                    configurationSection.set("slimes", newValue);
-                } else if (args[0].toLowerCase().equals("spawnitems")) {
-
+                if (modified.equals("tnt") || modified.equals("weather") || modified.equals("slimes"))
+                {
+                    config.getConfigurationSection(modified).set("enabled", newValue);
+                }
+                else if (args[0].toLowerCase().equals("spawnitems"))
+                {
                     if (args[1].toLowerCase().equals("location")) {
 
                         try {
-                            ConfigurationSection section = config.getConfigurationSection("meta").createSection("spawnItems").createSection("location");
 
-                            if (sender instanceof Player) {
+                            ConfigurationSection section = null;
+	                        ConfigurationSection spawnItemsSection = config.getConfigurationSection("spawnItems");
+
+	                        if (spawnItemsSection.contains("location"))
+	                        {
+		                        section = spawnItemsSection.getConfigurationSection("location");
+	                        }
+	                        else
+	                        {
+		                        section = spawnItemsSection.createSection("location");
+	                        }
+
+                            if (sender instanceof Player)
+                            {
                                 Player player = (Player)sender;
                                 this.putLocationInSection(player.getLocation(), section);
                                 sender.sendMessage(ChatColor.GREEN + "Location set successfully.");
@@ -63,7 +73,7 @@ public class TweaksCommandExecutor implements CommandExecutor {
                         }
 
                     } else {
-                        configurationSection.set("spawnItems", newValue);
+	                    config.getConfigurationSection("spawnItems").set("enabled", newValue);
                     }
                 } else {
                     sender.sendMessage(ChatColor.RED + "Invalid parameter. Expected TNT, weather, or slimes.");
@@ -79,14 +89,21 @@ public class TweaksCommandExecutor implements CommandExecutor {
                 String newValueString = newValue ? "enabled" : "disabled";
                 sender.sendMessage(ChatColor.AQUA + argument + " tweaks are now " + ChatColor.GOLD + newValueString +ChatColor.AQUA + ".");
             } else if (args.length == 1) {
-                String argument = args[0].toLowerCase();
-                if (argument.equals("tnt") || argument.equals("weather") || argument.equals("slimes") || argument.equals("spawnItems")) {
-                    boolean enabled = config.getBoolean("enabled-" + argument);
+                String argument = args[0];
+                if (argument.equals("tnt") || argument.equals("weather") || argument.equals("slimes") || argument.equals("spawnItems"))
+                {
+                    boolean enabled = config.getConfigurationSection(argument).getBoolean("enabled");
                     if (argument.equals("tnt")) {
                         argument = "TNT";
-                    } else {
+                    }
+                    else if (argument.equals("spawnItems"))
+                    {
+	                    argument = "Item-spawning";
+                    }
+                    else {
                         argument = capitalizedString(argument);
                     }
+
                     if (enabled) {
                         sender.sendMessage(ChatColor.AQUA + argument + ChatColor.GREEN + " tweaks are currently enabled.");
                     } else {
